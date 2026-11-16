@@ -1,0 +1,17 @@
+{
+  "name": "lucky7-classroom-app",
+  "version": "1.0.0",
+  "description": "QR 접속 기반 실시간 교실 복불복 앱 (행운의 7초, 광클 복불복, 티켓팅 연습)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.1"
+  }
+}

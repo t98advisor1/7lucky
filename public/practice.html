@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>티켓팅 혼자 연습 · 서버 시간 동기화</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container-narrow" style="padding-top: 20px; padding-bottom: 40px;">
+    <div class="flex items-center justify-between mb-2">
+      <a href="/" class="btn btn-outline btn-sm">🏠 홈</a>
+      <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff;">🎫 티켓팅 연습장</span>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top: 0;">🕒 서버 시간 동기화</h2>
+      <p class="text-muted" style="font-size: 0.9rem;">
+        원하는 예매 서버의 표준 시간을 불러와 내 기기와의 시간 오차를 맞춘 뒤, 정각 티켓팅을 연습해보세요.
+      </p>
+
+      <div class="mt-2">
+        <label class="text-muted" style="font-size: 0.85rem;">서버 선택</label>
+        <div class="flex gap-2 mt-1">
+          <select id="serverSelect" class="select">
+            <option value="interpark">인터파크 티켓 서버</option>
+            <option value="melon">멜론 티켓 서버</option>
+            <option value="yes24">예스24 티켓 서버</option>
+            <option value="korail">코레일 예매 서버</option>
+            <option value="naver">네이버 표준 서버</option>
+            <option value="local">교실 자체 정밀 서버</option>
+          </select>
+          <button id="syncBtn" class="btn btn-primary btn-sm" style="white-space: nowrap;">동기화</button>
+        </div>
+      </div>
+
+      <div class="text-center mt-3" style="padding: 16px; border-radius: 14px; background: rgba(11, 16, 32, 0.7); border: 1px solid var(--border);">
+        <div id="serverNameLabel" class="text-muted" style="font-size: 0.85rem;">서버 시간 불러오는 중...</div>
+        <div id="liveServerClock" class="timer-display mt-1" style="font-size: 2.3rem; color: #fcd34d;">00:00:00.000</div>
+        <div id="offsetInfoLabel" class="text-muted mt-1" style="font-size: 0.8rem;">오차 측정 중...</div>
+      </div>
+    </div>
+
+    <!-- Practice Stage -->
+    <div class="card mt-3 text-center">
+      <h3 style="margin-top: 0;">⚡ 실전 연습 (정각 클릭 + 포도알)</h3>
+      <div class="flex gap-2 justify-center mb-2">
+        <label class="flex items-center gap-1" style="font-size: 0.9rem;">
+          <input type="checkbox" id="withSeatCheck" checked /> 포도알 좌석 선택 포함
+        </label>
+      </div>
+
+      <div id="practiceIdle">
+        <button id="startPracticeBtn" class="btn btn-primary btn-lg w-full">
+          🚀 5초 뒤 오픈 연습 시작!
+        </button>
+      </div>
+
+      <div id="practiceActive" class="hidden">
+        <div id="practiceStatusText" style="font-weight: 800; font-size: 1.1rem; color: #fcd34d;">오픈까지 5초...</div>
+        <button id="practiceBookBtn" class="tap-pad mt-2" style="min-height: 160px; background: #334155;">
+          ⏳ 오픈 대기 중...
+        </button>
+      </div>
+
+      <div id="practiceSeatStep" class="hidden mt-2">
+        <div style="font-weight: 800; margin-bottom: 10px; color: #e9d5ff;">🍇 보라색 좌석 1개를 빠르게 터치!</div>
+        <div id="practiceSeatGrid" class="seat-grid"></div>
+      </div>
+
+      <div id="practiceResultBox" class="hidden mt-3" style="padding: 14px; border-radius: 12px; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35);">
+        <div id="practiceResultText" style="font-size: 1.25rem; font-weight: 900;">-</div>
+        <button id="retryPracticeBtn" class="btn btn-outline btn-sm mt-2">다시 연습하기</button>
+      </div>
+    </div>
+
+    <!-- Recent Practice Log -->
+    <div class="card mt-3">
+      <h3 style="margin: 0 0 8px; font-size: 1rem;">📜 내 연습 기록</h3>
+      <div id="practiceLog" class="text-muted" style="font-size: 0.9rem;">아직 연습 기록이 없습니다.</div>
+    </div>
+  </div>
+
+  <script>
+    const serverSelect = document.getElementById('serverSelect');
+    const syncBtn = document.getElementById('syncBtn');
+    const serverNameLabel = document.getElementById('serverNameLabel');
+    const liveServerClock = document.getElementById('liveServerClock');
+    const offsetInfoLabel = document.getElementById('offsetInfoLabel');
+
+    const withSeatCheck = document.getElementById('withSeatCheck');
+    const practiceIdle = document.getElementById('practiceIdle');
+    const startPracticeBtn = document.getElementById('startPracticeBtn');
+    const practiceActive = document.getElementById('practiceActive');
+    const practiceStatusText = document.getElementById('practiceStatusText');
+    const practiceBookBtn = document.getElementById('practiceBookBtn');
+    const practiceSeatStep = document.getElementById('practiceSeatStep');
+    const practiceSeatGrid = document.getElementById('practiceSeatGrid');
+    const practiceResultBox = document.getElementById('practiceResultBox');
+    const practiceResultText = document.getElementById('practiceResultText');
+    const retryPracticeBtn = document.getElementById('retryPracticeBtn');
+    const practiceLog = document.getElementById('practiceLog');
+
+    let serverOffsetMs = 0;
+    let practiceTimer = null;
+    let isOpened = false;
+    let openPerf = 0;
+    let reactionMs = 0;
+    let earlyClicks = 0;
+    const logs = [];
+
+    async function syncServerTime() {
+      const target = serverSelect.value;
+      serverNameLabel.textContent = '서버 시간 측정 중...';
+      try {
+        const t0 = performance.now();
+        const res = await fetch(`/api/server-time?target=${encodeURIComponent(target)}`);
+        const data = await res.json();
+        const localRtt = Math.round(performance.now() - t0);
+        // serverNow vs Date.now() + external offset
+        const clientToBackendOffset = data.serverNow + localRtt / 2 - Date.now();
+        serverOffsetMs = clientToBackendOffset + (data.offsetMs || 0);
+
+        serverNameLabel.textContent = data.name + (data.fallback ? ' (자체 시계 대체)' : '');
+        offsetInfoLabel.textContent = `기기 오차 보정: ${Math.round(serverOffsetMs)}ms · 왕복 지연(RTT): ${data.rttMs || localRtt}ms`;
+      } catch (e) {
+        serverNameLabel.textContent = '자체 시계 모드';
+        offsetInfoLabel.textContent = '서버 연결 오류로 기기 시계를 사용합니다.';
+      }
+    }
+
+    setInterval(() => {
+      const d = new Date(Date.now() + serverOffsetMs);
+      liveServerClock.textContent =
+        d.toTimeString().split(' ')[0] + '.' + String(d.getMilliseconds()).padStart(3, '0');
+    }, 33);
+
+    syncBtn.addEventListener('click', syncServerTime);
+    serverSelect.addEventListener('change', syncServerTime);
+    syncServerTime();
+
+    function startPractice() {
+      clearInterval(practiceTimer);
+      isOpened = false;
+      earlyClicks = 0;
+      practiceIdle.classList.add('hidden');
+      practiceResultBox.classList.add('hidden');
+      practiceSeatStep.classList.add('hidden');
+      practiceActive.classList.remove('hidden');
+
+      practiceBookBtn.style.background = '#334155';
+      practiceBookBtn.textContent = '⏳ 오픈 대기 중...';
+
+      const openAt = performance.now() + 5000;
+      practiceTimer = setInterval(() => {
+        const rem = openAt - performance.now();
+        if (rem > 0) {
+          practiceStatusText.textContent = `오픈까지 ${(rem / 1000).toFixed(2)}초...`;
+          practiceStatusText.style.color = '#fcd34d';
+        } else {
+          clearInterval(practiceTimer);
+          isOpened = true;
+          openPerf = performance.now();
+          practiceStatusText.textContent = '🔥 지금 오픈되었습니다! 클릭!';
+          practiceStatusText.style.color = '#6ee7b7';
+          practiceBookBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+          practiceBookBtn.textContent = '🎫 지금 예매하기!';
+        }
+      }, 25);
+    }
+
+    practiceBookBtn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (!isOpened) {
+        earlyClicks += 1;
+        practiceStatusText.textContent = `⚠️ 오픈 전 클릭! (${earlyClicks}회 페널티 +0.5초)`;
+        practiceStatusText.style.color = '#fca5a5';
+        if (navigator.vibrate) navigator.vibrate(25);
+        return;
+      }
+
+      reactionMs = Math.round(performance.now() - openPerf);
+      if (!withSeatCheck.checked) {
+        finishPractice('자유석');
+        return;
+      }
+
+      practiceActive.classList.add('hidden');
+      practiceSeatStep.classList.remove('hidden');
+      renderSeats();
+    });
+
+    function renderSeats() {
+      const rows = ['A', 'B', 'C', 'D'];
+      const cols = [1, 2, 3, 4, 5];
+      const all = [];
+      rows.forEach((r) => cols.forEach((c) => all.push(`${r}${c}`)));
+      const taken = new Set();
+      while (taken.size < 7) {
+        taken.add(all[Math.floor(Math.random() * all.length)]);
+      }
+
+      practiceSeatGrid.innerHTML = all
+        .map((label) => {
+          const isTaken = taken.has(label);
+          return `<button class="seat-btn ${isTaken ? 'taken' : ''}" data-seat="${label}" ${isTaken ? 'disabled' : ''}>${label}</button>`;
+        })
+        .join('');
+
+      practiceSeatGrid.querySelectorAll('.seat-btn:not(.taken)').forEach((btn) => {
+        btn.addEventListener('pointerdown', (ev) => {
+          ev.preventDefault();
+          finishPractice(btn.dataset.seat);
+        });
+      });
+    }
+
+    function finishPractice(seatLabel) {
+      const totalMs = Math.round(performance.now() - openPerf) + earlyClicks * 500;
+      practiceActive.classList.add('hidden');
+      practiceSeatStep.classList.add('hidden');
+      practiceResultBox.classList.remove('hidden');
+
+      practiceResultText.textContent = `완료 ${(totalMs / 1000).toFixed(3)}초 (반응 ${(reactionMs / 1000).toFixed(3)}초 · 좌석 ${seatLabel})`;
+
+      logs.unshift({
+        server: serverSelect.options[serverSelect.selectedIndex].text,
+        totalMs,
+        reactionMs,
+        seatLabel,
+        earlyClicks,
+      });
+
+      practiceLog.innerHTML = logs
+        .slice(0, 10)
+        .map(
+          (l, idx) => `
+          <div class="flex justify-between" style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <span>#${logs.length - idx} ${l.server}</span>
+            <strong>${(l.totalMs / 1000).toFixed(3)}초 (${l.seatLabel})</strong>
+          </div>`
+        )
+        .join('');
+    }
+
+    startPracticeBtn.addEventListener('click', startPractice);
+    retryPracticeBtn.addEventListener('click', startPractice);
+  </script>
+</body>
+</html>
