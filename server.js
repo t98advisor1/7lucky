@@ -219,6 +219,7 @@ function createRoom(hostSocketId) {
     timers: {
       countdown: null,
       endGame: null,
+      clickerBroadcast: null,
     },
   };
   rooms.set(code, room);
@@ -233,6 +234,10 @@ function clearRoomTimers(room) {
   if (room.timers.endGame) {
     clearTimeout(room.timers.endGame);
     room.timers.endGame = null;
+  }
+  if (room.timers.clickerBroadcast) {
+    clearInterval(room.timers.clickerBroadcast);
+    room.timers.clickerBroadcast = null;
   }
 }
 
@@ -479,6 +484,15 @@ io.on('connection', (socket) => {
       if (mode === 'clicker') {
         const durationMs = Math.max(3, Math.min(30, Number(modeOptions.durationSec || 10))) * 1000;
         endsAt = startedAt + durationMs;
+        room.timers.clickerBroadcast = setInterval(() => {
+          if (!room.currentRound || room.status !== 'playing' || !room.currentRound.dirty) return;
+          room.currentRound.dirty = false;
+          const rankings = computeRankings('clicker', room.currentRound.options, room.currentRound.results);
+          io.to(room.hostSocketId).emit('game:live_results', {
+            mode: 'clicker',
+            results: rankings,
+          });
+        }, 250);
         room.timers.endGame = setTimeout(() => {
           finalizeCurrentRound(room);
         }, durationMs + 700); // 700ms grace period for final packets
@@ -652,12 +666,7 @@ io.on('connection', (socket) => {
       clicks: safeClicks,
       submittedAt: Date.now(),
     });
-
-    const rankings = computeRankings('clicker', room.currentRound.options, room.currentRound.results);
-    io.to(room.hostSocketId).emit('game:live_results', {
-      mode: 'clicker',
-      results: rankings,
-    });
+    room.currentRound.dirty = true;
   });
 
   // Player submits final clicker count

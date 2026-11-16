@@ -11,13 +11,13 @@
     <!-- Top Header -->
     <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
       <div class="flex items-center gap-2">
-        <a href="/" class="btn btn-outline btn-sm">🏠 홈</a>
-        <h2 style="margin: 0;">👑 방장 전광판</h2>
+        <a href="/" class="btn btn-outline btn-sm">홈</a>
+        <h2 style="margin: 0; letter-spacing: -0.01em;">방장 전광판</h2>
         <span id="roundBadge" class="badge">대기 중</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <button id="openHistoryBtn" class="btn btn-accent btn-sm">📊 전체 누적 기록 (<span id="historyCount">0</span>)</button>
-        <button id="newRoomBtn" class="btn btn-outline btn-sm">🔄 새 방 만들기</button>
+        <button id="openHistoryBtn" class="btn btn-accent btn-sm">전체 누적 기록 (<span id="historyCount">0</span>)</button>
+        <button id="newRoomBtn" class="btn btn-outline btn-sm">새 방 만들기</button>
       </div>
     </div>
 
@@ -34,19 +34,19 @@
 
           <div class="mt-2">
             <label class="text-muted" style="font-size: 0.8rem; display: block; text-align: left; margin-bottom: 4px;">
-              접속 주소 (같은 와이파이 IP 자동감지 / 수정 가능)
+              접속 주소 (자동 감지 / 수정 가능)
             </label>
             <div class="flex gap-1">
               <input id="joinUrlInput" class="input" style="font-size: 0.82rem; padding: 8px 10px;" />
               <button id="updateQrBtn" class="btn btn-outline btn-sm" title="주소로 QR 다시 생성">적용</button>
             </div>
-            <button id="copyUrlBtn" class="btn btn-primary btn-sm w-full mt-2">📋 참여 링크 복사</button>
+            <button id="copyUrlBtn" class="btn btn-primary btn-sm w-full mt-2">참여 링크 복사</button>
           </div>
         </div>
 
         <div class="card">
           <div class="flex items-center justify-between mb-2">
-            <h3 style="margin: 0; font-size: 1.05rem;">👥 참여 학생</h3>
+            <h3 style="margin: 0; font-size: 1.05rem;">참여 학생</h3>
             <span id="playerCountBadge" class="badge badge-success">0 / 100명</span>
           </div>
           <div id="playerChips" class="player-chips">
@@ -60,9 +60,9 @@
         <!-- Mode Selector & Options -->
         <div class="card">
           <div class="mode-tabs" id="modeTabs">
-            <button class="mode-tab active" data-mode="lucky7">⏱️ 행운의 7초</button>
-            <button class="mode-tab" data-mode="clicker">👆 광클 복불복</button>
-            <button class="mode-tab" data-mode="ticketing">🎫 티켓팅 연습</button>
+            <button class="mode-tab active" data-mode="lucky7">행운의 7초</button>
+            <button class="mode-tab" data-mode="clicker">광클 복불복</button>
+            <button class="mode-tab" data-mode="ticketing">티켓팅 연습</button>
           </div>
 
           <!-- Lucky 7 Options -->
@@ -76,7 +76,7 @@
               </select>
             </div>
             <div style="flex: 1; min-width: 180px;">
-              <label class="text-muted" style="font-size: 0.82rem;">블라인드 모드 (긴장감 UP)</label>
+              <label class="text-muted" style="font-size: 0.82rem;">블라인드 모드</label>
               <select id="lucky7Blind" class="select mt-1">
                 <option value="true" selected>켜기 (3초 후 숫자 가림)</option>
                 <option value="false">끄기 (계속 숫자 보임)</option>
@@ -97,10 +97,10 @@
             <div style="flex: 1; min-width: 180px;">
               <label class="text-muted" style="font-size: 0.82rem;">복불복 당첨 기준</label>
               <select id="clickerRule" class="select mt-1">
-                <option value="highest" selected>🏆 최다 클릭 1등 당첨</option>
-                <option value="lowest">🐢 최소 클릭 꼴찌 당첨 (복불복)</option>
-                <option value="middle">🎯 중간 순위 당첨 (눈치게임)</option>
-                <option value="random_rank">🎲 랜덤 순위 당첨 (완전 복불복)</option>
+                <option value="highest" selected>최다 클릭 1등 당첨</option>
+                <option value="lowest">최소 클릭 꼴찌 당첨 (복불복)</option>
+                <option value="middle">중간 순위 당첨 (눈치게임)</option>
+                <option value="random_rank">랜덤 순위 당첨 (완전 복불복)</option>
               </select>
             </div>
           </div>
@@ -139,17 +139,17 @@
         <div class="card stage-box" id="stageBox">
           <!-- Waiting View -->
           <div id="stageWaiting" class="text-center w-full">
-            <div style="font-size: 3rem;">🎮</div>
-            <h2 id="waitingTitle" style="margin: 8px 0;">행운의 7초를 시작할 준비가 되었습니다</h2>
+            <span class="badge">READY</span>
+            <h2 id="waitingTitle" style="margin: 12px 0 8px;">행운의 7초를 시작할 준비가 되었습니다</h2>
             <p id="waitingDesc" class="text-muted">학생들이 QR로 입장하면 아래 시작 버튼을 눌러주세요.</p>
             <button id="startGameBtn" class="btn btn-primary btn-lg mt-2" style="min-width: 240px;">
-              🚀 지금 시작하기!
+              게임 시작하기
             </button>
           </div>
 
           <!-- Countdown View -->
           <div id="stageCountdown" class="text-center w-full hidden">
-            <div class="text-muted" style="font-size: 1.1rem;">곧 시작합니다! 휴대폰을 준비하세요</div>
+            <div class="text-muted" style="font-size: 1.1rem;">곧 시작합니다. 휴대폰을 준비하세요.</div>
             <div id="countdownNumber" class="countdown-num mt-2">3</div>
           </div>
 
@@ -157,10 +157,10 @@
           <div id="stagePlaying" class="w-full hidden">
             <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
               <div>
-                <span class="badge badge-danger">● LIVE 진행 중</span>
+                <span class="badge badge-danger">LIVE 진행 중</span>
                 <span id="playingModeLabel" class="text-muted" style="margin-left: 8px; font-weight: 700;"></span>
               </div>
-              <button id="endGameBtn" class="btn btn-danger btn-sm">⏹️ 라운드 마감하기</button>
+              <button id="endGameBtn" class="btn btn-danger btn-sm">라운드 마감하기</button>
             </div>
 
             <div class="text-center my-2" style="padding: 12px 0;">
@@ -174,7 +174,7 @@
           <!-- Finished View -->
           <div id="stageFinished" class="w-full hidden">
             <div id="winnerBanner" class="text-center mb-3" style="padding: 16px; border-radius: 14px; background: rgba(245, 158, 11, 0.16); border: 1px solid rgba(245, 158, 11, 0.4);">
-              <div class="badge badge-accent">🏆 이번 라운드 당첨 / 1등</div>
+              <div class="badge badge-accent">이번 라운드 당첨 / 1등</div>
               <h2 id="winnerName" style="margin: 8px 0 4px; font-size: 1.8rem;">-</h2>
               <div id="winnerDetail" class="text-muted">-</div>
             </div>
@@ -187,8 +187,8 @@
             </div>
 
             <div class="flex justify-center gap-2 mt-3 flex-wrap">
-              <button id="nextRoundBtn" class="btn btn-primary btn-lg">🔄 다음 라운드 준비</button>
-              <button id="viewHistoryFromFinishBtn" class="btn btn-outline btn-lg">📊 전체 누적 기록 보기</button>
+              <button id="nextRoundBtn" class="btn btn-primary btn-lg">다음 라운드 준비</button>
+              <button id="viewHistoryFromFinishBtn" class="btn btn-outline btn-lg">전체 누적 기록 보기</button>
             </div>
           </div>
         </div>
@@ -200,11 +200,11 @@
   <div id="historyModal" class="modal-backdrop">
     <div class="modal-content">
       <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-        <h2 style="margin: 0;">📊 전체 누적 기록</h2>
+        <h2 style="margin: 0;">전체 누적 기록</h2>
         <div class="flex gap-2">
-          <button id="exportCsvBtn" class="btn btn-success btn-sm">📥 CSV 다운로드</button>
-          <button id="clearHistoryBtn" class="btn btn-danger btn-sm">🗑️ 기록 초기화</button>
-          <button id="closeHistoryBtn" class="btn btn-outline btn-sm">✕ 닫기</button>
+          <button id="exportCsvBtn" class="btn btn-success btn-sm">CSV 다운로드</button>
+          <button id="clearHistoryBtn" class="btn btn-danger btn-sm">기록 초기화</button>
+          <button id="closeHistoryBtn" class="btn btn-outline btn-sm">닫기</button>
         </div>
       </div>
 

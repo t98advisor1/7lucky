@@ -264,6 +264,19 @@ button, input, select {
   opacity: 0.45;
 }
 
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #64748b;
+}
+
+.status-dot.online {
+  background: var(--success);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+}
+
 .player-chip .kick-btn {
   background: none;
   border: none;

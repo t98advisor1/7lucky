@@ -9,12 +9,12 @@
 <body>
   <div class="container-narrow" style="padding-top: 20px; padding-bottom: 40px;">
     <div class="flex items-center justify-between mb-2">
-      <a href="/" class="btn btn-outline btn-sm">🏠 홈</a>
-      <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff;">🎫 티켓팅 연습장</span>
+      <a href="/" class="btn btn-outline btn-sm">홈</a>
+      <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff;">티켓팅 연습장</span>
     </div>
 
     <div class="card">
-      <h2 style="margin-top: 0;">🕒 서버 시간 동기화</h2>
+      <h2 style="margin-top: 0;">서버 시간 동기화</h2>
       <p class="text-muted" style="font-size: 0.9rem;">
         원하는 예매 서버의 표준 시간을 불러와 내 기기와의 시간 오차를 맞춘 뒤, 정각 티켓팅을 연습해보세요.
       </p>
@@ -43,7 +43,7 @@
 
     <!-- Practice Stage -->
     <div class="card mt-3 text-center">
-      <h3 style="margin-top: 0;">⚡ 실전 연습 (정각 클릭 + 포도알)</h3>
+      <h3 style="margin-top: 0;">실전 연습 (정각 클릭 + 포도알)</h3>
       <div class="flex gap-2 justify-center mb-2">
         <label class="flex items-center gap-1" style="font-size: 0.9rem;">
           <input type="checkbox" id="withSeatCheck" checked /> 포도알 좌석 선택 포함
@@ -52,19 +52,19 @@
 
       <div id="practiceIdle">
         <button id="startPracticeBtn" class="btn btn-primary btn-lg w-full">
-          🚀 5초 뒤 오픈 연습 시작!
+          5초 뒤 오픈 연습 시작
         </button>
       </div>
 
       <div id="practiceActive" class="hidden">
         <div id="practiceStatusText" style="font-weight: 800; font-size: 1.1rem; color: #fcd34d;">오픈까지 5초...</div>
         <button id="practiceBookBtn" class="tap-pad mt-2" style="min-height: 160px; background: #334155;">
-          ⏳ 오픈 대기 중...
+          오픈 대기 중...
         </button>
       </div>
 
       <div id="practiceSeatStep" class="hidden mt-2">
-        <div style="font-weight: 800; margin-bottom: 10px; color: #e9d5ff;">🍇 보라색 좌석 1개를 빠르게 터치!</div>
+        <div style="font-weight: 800; margin-bottom: 10px; color: #e9d5ff;">보라색 좌석 1개를 빠르게 터치하세요</div>
         <div id="practiceSeatGrid" class="seat-grid"></div>
       </div>
 
@@ -76,7 +76,7 @@
 
     <!-- Recent Practice Log -->
     <div class="card mt-3">
-      <h3 style="margin: 0 0 8px; font-size: 1rem;">📜 내 연습 기록</h3>
+      <h3 style="margin: 0 0 8px; font-size: 1rem;">내 연습 기록</h3>
       <div id="practiceLog" class="text-muted" style="font-size: 0.9rem;">아직 연습 기록이 없습니다.</div>
     </div>
   </div>
@@ -149,7 +149,7 @@
       practiceActive.classList.remove('hidden');
 
       practiceBookBtn.style.background = '#334155';
-      practiceBookBtn.textContent = '⏳ 오픈 대기 중...';
+      practiceBookBtn.textContent = '오픈 대기 중...';
 
       const openAt = performance.now() + 5000;
       practiceTimer = setInterval(() => {
@@ -161,10 +161,10 @@
           clearInterval(practiceTimer);
           isOpened = true;
           openPerf = performance.now();
-          practiceStatusText.textContent = '🔥 지금 오픈되었습니다! 클릭!';
+          practiceStatusText.textContent = '지금 오픈되었습니다. 클릭하세요.';
           practiceStatusText.style.color = '#6ee7b7';
           practiceBookBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-          practiceBookBtn.textContent = '🎫 지금 예매하기!';
+          practiceBookBtn.textContent = '지금 예매하기';
         }
       }, 25);
     }
@@ -173,7 +173,7 @@
       e.preventDefault();
       if (!isOpened) {
         earlyClicks += 1;
-        practiceStatusText.textContent = `⚠️ 오픈 전 클릭! (${earlyClicks}회 페널티 +0.5초)`;
+        practiceStatusText.textContent = `오픈 전 클릭 (${earlyClicks}회 페널티 +0.5초)`;
         practiceStatusText.style.color = '#fca5a5';
         if (navigator.vibrate) navigator.vibrate(25);
         return;

@@ -82,9 +82,9 @@ function formatDiffMs(diffMs) {
 }
 
 function getModeLabel(mode) {
-  if (mode === 'lucky7') return '⏱️ 행운의 7초';
-  if (mode === 'clicker') return '👆 광클 복불복';
-  if (mode === 'ticketing') return '🎫 티켓팅 연습';
+  if (mode === 'lucky7') return '행운의 7초';
+  if (mode === 'clicker') return '광클 복불복';
+  if (mode === 'ticketing') return '티켓팅 연습';
   return mode;
 }
 
@@ -179,7 +179,8 @@ function renderRoomState(state) {
       .map(
         (p) => `
       <span class="player-chip ${p.connected ? '' : 'offline'}">
-        <span>${p.connected ? '🟢' : '⚪'} ${escapeHtml(p.nickname)}</span>
+        <span class="status-dot ${p.connected ? 'online' : ''}"></span>
+        <span>${escapeHtml(p.nickname)}</span>
         <button class="kick-btn" onclick="kickPlayer('${p.id}')" title="내보내기">×</button>
       </span>
     `
@@ -212,12 +213,12 @@ function renderRoomState(state) {
   if (state.status === 'waiting') {
     stopStageTimers();
     if (state.mode === 'lucky7') {
-      waitingTitle.textContent = `⏱️ 행운의 ${state.options.lucky7.targetSec}초를 잡아라!`;
+      waitingTitle.textContent = `행운의 ${state.options.lucky7.targetSec}초를 잡아라`;
       waitingDesc.textContent = state.options.lucky7.blindEnabled
-        ? '시작 3초 뒤 숫자가 가려집니다. 마음속으로 세서 정확히 멈추세요!'
-        : '화면의 시계를 보고 목표 시간에 맞춰 정확히 멈추세요!';
+        ? '시작 3초 뒤 숫자가 가려집니다. 마음속으로 세서 정확히 멈추세요.'
+        : '화면의 시계를 보고 목표 시간에 맞춰 정확히 멈추세요.';
     } else if (state.mode === 'clicker') {
-      waitingTitle.textContent = `👆 ${state.options.clicker.durationSec}초 광클 복불복!`;
+      waitingTitle.textContent = `${state.options.clicker.durationSec}초 광클 복불복`;
       const ruleMap = {
         highest: '최다 클릭 1등 당첨',
         lowest: '최소 클릭 꼴찌 당첨',
@@ -226,8 +227,8 @@ function renderRoomState(state) {
       };
       waitingDesc.textContent = `당첨 규칙: ${ruleMap[state.options.clicker.winnerRule]}`;
     } else {
-      waitingTitle.textContent = '🎫 실시간 티켓팅 연습!';
-      waitingDesc.textContent = '카운트다운이 0이 되는 순간 예매하기 버튼을 누르고 좌석을 잡으세요!';
+      waitingTitle.textContent = '실시간 티켓팅 연습';
+      waitingDesc.textContent = '카운트다운이 0이 되는 순간 예매하기 버튼을 누르고 좌석을 잡으세요.';
     }
   }
 
@@ -328,7 +329,7 @@ function renderFinishedStage(round) {
     winnerName.textContent = '참여 기록 없음';
     winnerDetail.textContent = '이번 라운드에 제출된 기록이 없습니다.';
   } else if (round.mode === 'lucky7') {
-    winnerName.textContent = `🎉 ${winner.nickname} (${formatMsToSec(winner.elapsedMs)})`;
+    winnerName.textContent = `${winner.nickname} (${formatMsToSec(winner.elapsedMs)})`;
     winnerDetail.textContent = `목표와의 오차: ${formatDiffMs(winner.diffMs)}`;
   } else if (round.mode === 'clicker') {
     const ruleLabel = {
@@ -337,10 +338,10 @@ function renderFinishedStage(round) {
       middle: '중간 순위 눈치게임',
       random_rank: '랜덤 순위 복불복',
     }[round.options.winnerRule];
-    winnerName.textContent = `🎉 ${winner.nickname} (${winner.rank}위 · ${winner.clicks}회)`;
+    winnerName.textContent = `${winner.nickname} (${winner.rank}위 · ${winner.clicks}회)`;
     winnerDetail.textContent = `당첨 규칙: ${ruleLabel}`;
   } else if (round.mode === 'ticketing') {
-    winnerName.textContent = `🎫 ${winner.nickname} (${formatMsToSec(winner.totalMs)})`;
+    winnerName.textContent = `${winner.nickname} (${formatMsToSec(winner.totalMs)})`;
     winnerDetail.textContent = `오픈 반응속도 ${formatMsToSec(winner.reactionMs)} · 좌석 ${winner.seatLabel}`;
   }
 
@@ -369,7 +370,7 @@ function renderFinishedStage(round) {
         <td><strong>${r.rank}위</strong></td>
         <td>${escapeHtml(r.nickname)}</td>
         <td><strong>${r.clicks}회</strong></td>
-        <td>${winner && r.playerId === winner.playerId ? '🏆 당첨!' : ''}</td>
+        <td>${winner && r.playerId === winner.playerId ? '당첨' : ''}</td>
       </tr>`
       )
       .join('');
@@ -525,9 +526,9 @@ copyUrlBtn.addEventListener('click', async () => {
   const url = joinUrlInput.value.trim();
   try {
     await navigator.clipboard.writeText(url);
-    copyUrlBtn.textContent = '✅ 링크 복사됨!';
+    copyUrlBtn.textContent = '링크 복사됨';
     setTimeout(() => {
-      copyUrlBtn.textContent = '📋 참여 링크 복사';
+      copyUrlBtn.textContent = '참여 링크 복사';
     }, 1500);
   } catch (e) {
     prompt('아래 링크를 복사하세요:', url);

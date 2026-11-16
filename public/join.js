@@ -100,9 +100,9 @@ function formatClock(ms) {
 }
 
 function getModeLabel(mode) {
-  if (mode === 'lucky7') return '⏱️ 행운의 7초';
-  if (mode === 'clicker') return '👆 광클 복불복';
-  if (mode === 'ticketing') return '🎫 티켓팅 연습';
+  if (mode === 'lucky7') return '행운의 7초';
+  if (mode === 'clicker') return '광클 복불복';
+  if (mode === 'ticketing') return '티켓팅 연습';
   return mode;
 }
 
@@ -238,7 +238,7 @@ function renderRoomState(state) {
     pStageFinished.classList.remove('hidden');
 
     const winner = state.currentRound.specialWinner;
-    pFinishWinner.textContent = winner ? `🏆 당첨/1등: ${winner.nickname}` : '기록 없음';
+    pFinishWinner.textContent = winner ? `당첨/1등: ${winner.nickname}` : '기록 없음';
 
     const myRes = (state.currentRound.results || []).find((r) => r.playerId === myPlayerId);
     if (!myRes) {
@@ -345,7 +345,7 @@ pTicketingEarlyBtn.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   ticketEarlyPenaltyCount += 1;
   earlyLockUntil = Date.now() + 500;
-  pEarlyWarn.textContent = `⚠️ 아직 오픈 전입니다! (${ticketEarlyPenaltyCount}회 부정클릭)`;
+  pEarlyWarn.textContent = `아직 오픈 전입니다. (${ticketEarlyPenaltyCount}회 부정클릭)`;
   if (navigator.vibrate) navigator.vibrate(30);
 });
 
@@ -371,7 +371,7 @@ socket.on('game:start', ({ mode, options, endsAt, serverNow }) => {
       pLucky7Clock.textContent = formatMsToSec(elapsed);
       if (options.blindEnabled && elapsed >= blindAfterMs && !lucky7Submitted) {
         pLucky7Clock.classList.add('timer-blind');
-        pLucky7BlindHint.textContent = '🙈 블라인드 중! 마음속으로 세세요!';
+        pLucky7BlindHint.textContent = '블라인드 중 — 마음속으로 세세요';
       }
     }, 25);
   } else if (mode === 'clicker') {
@@ -454,9 +454,9 @@ pTicketBookBtn.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   if (ticketSubmitted) return;
   if (Date.now() < earlyLockUntil) {
-    pTicketBookBtn.textContent = '⏳ 부정클릭 잠금 중...';
+    pTicketBookBtn.textContent = '부정클릭 잠금 중...';
     setTimeout(() => {
-      pTicketBookBtn.textContent = '🎫 지금 예매하기!';
+      pTicketBookBtn.textContent = '지금 예매하기';
     }, 300);
     return;
   }
