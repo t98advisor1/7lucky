@@ -510,26 +510,21 @@
     <!-- ============================================================== -->
     <!-- 3. KAKAOTALK CHAT Q&A ("카카오톡 메시지 통") & SHARE BOX        -->
     <!-- ============================================================== -->
-    <div class="mt-3" style="margin-top: 32px;">
+    <div id="qna" class="mt-3" style="margin-top: 32px; scroll-margin-top: 24px;">
       <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
         <div>
           <span class="badge badge-accent">자주 묻는 질문 &amp; 유의사항 Q&amp;A</span>
           <h2 style="margin: 8px 0 4px;">선생님들이 가장 궁금해하시는 Q&amp;A (톡 안내)</h2>
         </div>
-        <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-primary btn-sm">
-          제작자 블로그 (math-tong) 방문하기 ↗
-        </a>
       </div>
 
       <div class="kakao-room">
         <div class="kakao-header">
           <div class="kakao-header-title">
-            <span>행운의 7초 · 교실 복불복 Q&amp;A 안내방</span>
+            <span>딱 7.000초를 잡아라 · 교실 대항전 Q&amp;A 안내방</span>
             <span class="kakao-badge">실시간 가이드</span>
           </div>
-          <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="font-size: 0.82rem; font-weight: 800; color: #1e293b; text-decoration: underline;">
-            blog.naver.com/math-tong ↗
-          </a>
+          <span style="font-size: 0.82rem; font-weight: 800; color: #1e293b;">Q&amp;A 가이드</span>
         </div>
 
         <div class="kakao-body">
@@ -621,18 +616,18 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:39</span>
             <div class="kakao-bubble-right">
-              수업 시간에 진행할 때 꼭 알아두어야 할 유의사항이 있을까요?
+              수업 시간에 발표자를 뽑을 때나 1인 1스마트기기(크롬북·태블릿)로 진행할 때 키보드가 망가지진 않을지 걱정되는데 좋은 팁이 있을까요?
             </div>
           </div>
           <div class="kakao-msg-left">
             <div class="kakao-avatar">통</div>
             <div class="kakao-left-content">
-              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                <strong>수업 전 핵심 유의사항 3가지:</strong><br />
-                1) 무료 클라우드(Render) 특성상 15분간 아무도 접속하지 않으면 절전 모드로 들어갑니다. <strong>수업 시작 1분 전에 선생님 PC에서 사이트를 한 번 열어두시면</strong> 서버가 깨어나 학생들이 즉시 입장합니다.<br />
-                2) 교실 공유기(Wi-Fi) 1대에 50~100명이 동시에 몰리면 공유기 자체가 느려질 수 있으니, 온라인 주소로 접속할 때는 학생 <strong>모바일 데이터(LTE/5G)</strong>를 함께 쓰면 더욱 쾌적합니다.<br />
-                3) 더 많은 교실용 웹앱과 수업 자료는 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer">math-tong 공식 블로그 ↗</a>에서 언제든 확인하실 수 있습니다!
+                <strong>교실 발표자 선정 &amp; 크롬북 보호 꿀팁 3가지!</strong><br />
+                1) <strong>키보드 연타 방지 설계</strong>: 본 앱의 광클 복불복은 키보드(스페이스바·엔터) 연타가 아닌 <strong>화면 터치 또는 마우스 클릭(`pointerdown`)</strong>으로만 작동하도록 설계되어 키보드 파손을 예방합니다.<br />
+                2) <strong>크롬북 보호용 '중간 순위(눈치게임)' &amp; '행운의 7초' 활용</strong>: 무작정 세게 연타하는 대신 광클 복불복의 당첨 기준을 <strong>[중간 순위 당첨(눈치게임)]</strong>이나 <strong>[랜덤 순위 당첨]</strong>으로 바꾸거나, 단 한 번의 클릭으로 승부하는 <strong>[행운의 7초]</strong>로 발표자를 뽑으면 기기에 무리를 주지 않고도 아이들의 참여율을 폭발적으로 높일 수 있습니다.<br />
+                3) <strong>수업 1분 전 워밍업</strong>: 무료 클라우드(Render)는 15분 미접속 시 절전 모드로 들어가므로, 수업 시작 1분 전에 선생님 PC에서 방장 화면을 미리 한 번 열어두시면 학생들이 즉시 쾌적하게 입장합니다.
               </div>
             </div>
             <span class="kakao-time">오전 10:39</span>
@@ -641,12 +636,7 @@
 
         <div class="kakao-footer">
           <div style="font-size: 0.85rem; color: #334155; font-weight: 700;">
-            궁금한 점이나 추가 아이디어는 매쓰통 블로그에 남겨주세요.
-          </div>
-          <div class="flex gap-2">
-            <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-sm" style="background: #fee500; color: #191919; font-weight: 800;">
-              math-tong 블로그 바로가기 ↗
-            </a>
+            학급 발표자 선정 · 모둠 대표 뽑기 · 학급 레크리에이션에 자유롭게 활용하세요.
           </div>
         </div>
       </div>
@@ -660,14 +650,13 @@
           </div>
           <button type="button" id="copyKakaoMsgBtn" class="btn btn-accent btn-sm">카톡 안내 문구 복사하기</button>
         </div>
-        <pre id="kakaoShareText" style="margin: 0; padding: 12px; border-radius: 10px; background: rgba(11, 16, 32, 0.85); color: #f8fafc; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; font-family: inherit;">[행운의 7초 &amp; 교실 복불복 · 티켓팅 연습 안내]
-• 참여 방법: 화면의 QR 코드 스캔 또는 방 코드 6자리 입력 후 닉네임 입장 (방당 최대 100명)
+        <pre id="kakaoShareText" style="margin: 0; padding: 12px; border-radius: 10px; background: rgba(11, 16, 32, 0.85); color: #f8fafc; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; font-family: inherit;">[딱 7.000초를 잡아라! · 우리 반 실시간 손가락 대항전 안내]
+• 참여 방법: 화면의 QR 코드 스캔 또는 방 코드 6자리 입력 후 닉네임 입장 (방당 최대 100명 / 동시 50개 방 개설 가능)
 • 게임 종목:
   1) 행운의 7초 (버전 1: 숫자 보임 / 버전 2: 3초 후 블라인드)
-  2) 광클 복불복 (1등 / 꼴찌 / 중간순위 / 랜덤순위 당첨)
-  3) 실전 티켓팅 &amp; 포도알 연습 (예매처 서버시간 동기화)
-• 개인정보 안내: 서버 DB 무저장 (메모리 일시 처리 후 자동 완전 삭제)
-• 제작 및 안내 블로그: https://blog.naver.com/math-tong</pre>
+  2) 3D 광클 복불복 (1등 / 꼴찌 / 중간순위 눈치게임 / 랜덤순위 당첨)
+  3) 실전 티켓팅 &amp; 포도알 연습 (40여 개 예매처·대학 수강신청 서버시간 동기화)
+• 개인정보 안내: 서버 데이터베이스 무저장 (메모리 일시 처리 후 자동 완전 삭제)</pre>
       </div>
     </div>
 
@@ -675,8 +664,8 @@
       <div class="mb-2">
         <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
       </div>
-      <div>
-        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
+      <div style="font-weight: 700; color: #e2e8f0;">
+        Copyright © math-tong. All rights reserved.
       </div>
     </footer>
   </div>
