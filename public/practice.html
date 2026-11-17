@@ -30,7 +30,7 @@
     <!-- ======================================================== -->
     <div id="sectionLucky7">
       <div class="card">
-        <h2 style="margin-top: 0;">행운의 7초 혼자 연습</h2>
+        <h2 style="margin-top: 0;"><span class="point-gold">딱 7.000초를 잡아라!</span> 혼자 연습</h2>
         <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
           방장이 없어도 혼자서 <strong>숫자가 끝까지 보이는 버전</strong>과 <strong>3초 후 숫자가 가려지는 버전</strong> 두 가지를 선택해 타이밍 감각을 연습할 수 있습니다.
         </p>
@@ -166,10 +166,6 @@
           <div id="liveServerClock" class="timer-display mt-1" style="font-size: 2.3rem; color: #fcd34d;">00:00:00.000</div>
           <div id="offsetInfoLabel" class="text-muted mt-1" style="font-size: 0.8rem;">오차 측정 중...</div>
         </div>
-
-        <div class="text-muted mt-2" style="font-size: 0.82rem; text-align: right;">
-          참고 사이트: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (https://www.tickettime.co.kr/) ↗</a>
-        </div>
       </div>
 
       <!-- Practice Stage -->
@@ -213,11 +209,17 @@
     </div>
 
     <footer class="text-center mt-3" style="padding: 16px 0 0; border-top: 1px solid var(--border); font-size: 0.84rem; color: var(--text-muted);">
-      개인 연습 기록은 현재 브라우저 화면에서만 표시되며 서버에 저장되지 않습니다. ·
-      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 700; text-decoration: underline;">math-tong 공식 블로그 ↗</a>
+      <div class="mb-2">
+        <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
+      </div>
+      <div>개인 연습 기록은 현재 브라우저 화면에서만 표시되며 서버에 저장되지 않습니다.</div>
+      <div class="mt-1">
+        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
+      </div>
     </footer>
   </div>
 
+  <script src="/clicker3d.js"></script>
   <script>
     // --- Tab Switching ---
     const tabBtnLucky7 = document.getElementById('tabBtnLucky7');

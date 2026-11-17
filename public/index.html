@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>행운의 7초 · 교실 복불복 &amp; 티켓팅 연습</title>
+  <title>딱 7.000초를 잡아라! · 우리 반 QR 실시간 손가락 대항전</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <div class="container" style="padding-top: 28px; padding-bottom: 48px;">
     <!-- Top Navigation Bar -->
     <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-      <div class="flex items-center gap-2">
-        <span class="badge badge-accent">QR 동시 접속 · 방당 최대 100명</span>
-        <span class="badge badge-success">서버 DB 무저장 (메모리 일시 처리)</span>
-      </div>
+      <div class="visitor-pill" data-visitor-box>방문자 및 접속 현황 집계 중...</div>
       <div class="flex items-center gap-2">
         <a href="/manual" class="btn btn-accent btn-sm">사용 설명서 (PC · 모바일 매뉴얼)</a>
-        <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-outline btn-sm">math-tong 공식 블로그 ↗</a>
       </div>
     </div>
 
-    <div class="text-center mb-2" style="margin-top: 18px;">
-      <h1 style="font-size: 2.3rem; margin: 10px 0 8px; letter-spacing: -0.02em;">행운의 7초 &amp; 교실 복불복</h1>
-      <p class="text-muted" style="max-width: 680px; margin: 0 auto; line-height: 1.6;">
-        QR 코드로 학생들이 휴대폰에서 바로 참여하고, <strong>행운의 7초(숫자 보임 / 3초 후 가림)</strong>, <strong>광클 복불복</strong>, <strong>티켓팅 연습</strong>을 동시에 즐기며 모든 라운드 기록을 한눈에 확인하세요.
+    <div class="text-center mb-2" style="margin-top: 22px;">
+      <div class="badge" style="margin-bottom: 4px;">0.001초 타이밍 승부 · 3D 광클 복불복 · 실전 티켓팅</div>
+      <h1 class="hero-title">
+        <span class="point-gold">딱 7.000초를 잡아라!</span><br />
+        우리 반 실시간 손가락 대항전
+      </h1>
+      <p class="text-muted" style="max-width: 700px; margin: 0 auto; font-size: 1rem; line-height: 1.65;">
+        앱 설치 없이 QR 스캔 한 번으로 교실 전원 동시 접속! <strong>행운의 7초(숫자 보임 / 3초 후 블라인드)</strong>, 3D 바운싱 효과가 터지는 <strong>광클 복불복</strong>, 예매처 서버시간 <strong>실전 티켓팅</strong>까지 대형 전광판에서 함께 즐기세요.
       </p>
     </div>
 
@@ -32,9 +32,9 @@
       <div class="card flex flex-col justify-between gap-3">
         <div>
           <span class="badge">선생님 / 진행자용</span>
-          <h2 style="margin: 12px 0 6px;">방장 화면 열기</h2>
+          <h2 style="margin: 12px 0 6px;">전광판 열고 QR 만들기</h2>
           <p class="text-muted" style="font-size: 0.95rem; line-height: 1.55;">
-            교실 전용 QR 코드와 참여 링크를 생성하고, 학생들의 닉네임과 실시간 기록을 대형 화면(프로젝터)에 띄워 게임을 진행합니다.
+            우리 반 전용 QR 코드와 참여 링크를 생성하고, 학생들의 닉네임과 실시간 순위를 대형 화면(프로젝터·전자칠판)에 띄워 진행합니다.
           </p>
         </div>
         <a href="/host" class="btn btn-primary btn-lg w-full">방 만들고 QR 띄우기</a>
@@ -44,9 +44,9 @@
       <div class="card flex flex-col justify-between gap-3">
         <div>
           <span class="badge badge-success">학생 / 참가자용</span>
-          <h2 style="margin: 12px 0 6px;">코드로 바로 참여</h2>
+          <h2 style="margin: 12px 0 6px;">방 코드로 바로 입장</h2>
           <p class="text-muted" style="font-size: 0.95rem; line-height: 1.55;">
-            QR 스캔이 어렵거나 PC로 참여할 때는 화면에 표시된 6자리 방 코드를 입력해서 입장하세요.
+            QR 스캔이 어렵거나 태블릿·PC로 참여할 때는 전광판에 표시된 6자리 방 코드를 입력해 즉시 입장하세요.
           </p>
           <div class="mt-2">
             <input
@@ -58,7 +58,7 @@
             />
           </div>
         </div>
-        <button id="quickJoinBtn" class="btn btn-success btn-lg w-full">참여하기</button>
+        <button id="quickJoinBtn" class="btn btn-success btn-lg w-full">대항전 참여하기</button>
       </div>
 
       <!-- Solo Practice Card -->
@@ -67,7 +67,7 @@
           <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff; border-color: rgba(168,85,247,0.4);">개인 연습 모드</span>
           <h2 style="margin: 12px 0 6px;">7초 &amp; 티켓팅 혼자 연습</h2>
           <p class="text-muted" style="font-size: 0.95rem; line-height: 1.55;">
-            <strong>행운의 7초(숫자 보임 / 3초 후 가림)</strong>와 주요 예매처 서버 시간을 연동한 <strong>티켓팅·포도알 연습</strong>을 혼자서 자유롭게 연습해보세요.
+            방장이 없어도 혼자서 <strong>행운의 7초(숫자 보임 / 3초 후 가림)</strong>와 40여 개 예매처 서버시간 <strong>티켓팅·포도알 잡기</strong>를 연습해보세요.
           </p>
         </div>
         <a href="/practice" class="btn btn-outline btn-lg w-full">혼자 연습장 가기</a>
@@ -77,28 +77,26 @@
     <!-- Quick Guide & Manual CTA -->
     <div class="card mt-3">
       <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-        <h3 style="margin: 0;">3가지 게임 안내 및 매뉴얼</h3>
+        <h3 style="margin: 0;">3가지 대항전 종목 &amp; 상세 매뉴얼</h3>
         <a href="/manual" class="btn btn-primary btn-sm">화면 스크린샷 설명서 &amp; Q&amp;A 보기 →</a>
       </div>
       <div class="grid-3">
         <div>
-          <h4 style="margin: 6px 0; color: #fcd34d;">1. 행운의 7초 (2가지 버전 지원)</h4>
+          <h4 style="margin: 6px 0; color: #fde047;">1. 딱 7.000초를 잡아라 (2가지 버전)</h4>
           <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
-            초시계 숫자가 끝까지 보이는 <strong>[숫자 보임 버전]</strong>과 3초 뒤 숫자가 가려지는 <strong>[3초 후 블라인드 버전]</strong> 두 가지로 운영 및 개인 연습이 가능합니다.
+            초시계 숫자가 끝까지 보이는 <strong>[숫자 보임 버전]</strong>과 3초 뒤 숫자가 가려지는 <strong>[3초 후 블라인드 버전]</strong> 두 가지로 0.001초 승부를 겨룹니다.
           </p>
         </div>
         <div>
-          <h4 style="margin: 6px 0; color: #6ee7b7;">2. 광클 복불복 (터치 대결)</h4>
+          <h4 style="margin: 6px 0; color: #6ee7b7;">2. 3D 반전 당첨! 광클 복불복</h4>
           <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
-            제한 시간 동안 화면을 빠르게 터치해 클릭 수를 늘리세요. 1등 당첨뿐만 아니라 <strong>꼴찌 당첨, 중간 순위 당첨, 랜덤 순위 복불복</strong> 규칙을 고를 수 있습니다.
+            터치할 때마다 3D 에너지 볼이 역동적으로 튀어 오릅니다! 1등뿐만 아니라 <strong>꼴찌 당첨, 중간 순위(눈치게임), 랜덤 순위 복불복</strong> 규칙을 고를 수 있습니다.
           </p>
         </div>
         <div>
-          <h4 style="margin: 6px 0; color: #d8b4fe;">3. 티켓팅 연습 (예매처 서버 선택)</h4>
+          <h4 style="margin: 6px 0; color: #d8b4fe;">3. 서버시간 실전 티켓팅 &amp; 포도알</h4>
           <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
-            인터파크·멜론·티켓링크·예스24·코레일·SRT·대학 수강신청 등 각 서버 시간을 선택해 정각 클릭과 좌석(포도알) 선택을 연습합니다.
-            <br />
-            <span style="font-size: 0.82rem;">참고 사이트: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (tickettime.co.kr) ↗</a></span>
+            인터파크·멜론·티켓링크·예스24·코레일·SRT·대학 수강신청 등 40여 개 서버 시간을 선택해 정각 클릭과 좌석(포도알) 선택 속도를 겨룹니다.
           </p>
         </div>
       </div>
@@ -106,19 +104,19 @@
 
     <!-- Footer -->
     <footer class="text-center mt-3" style="padding: 20px 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-muted);">
+      <div class="mb-2">
+        <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
+      </div>
       <div style="margin-bottom: 6px;">
         본 서비스는 별도 데이터베이스(DB)를 사용하지 않으며, 모든 참여 기록은 서버 메모리(RAM)에서만 일시 처리 후 자동 소멸되어 <strong>서버에 어떠한 개인정보도 남지 않습니다.</strong>
       </div>
-      <div class="flex justify-center items-center gap-3 flex-wrap mt-2">
-        <span>Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 800; text-decoration: underline;">math-tong 공식 블로그 ↗</a></span>
-        <span>·</span>
-        <a href="/manual" style="color: #c7d2fe; font-weight: 700; text-decoration: underline;">PC / 모바일 스크린샷 매뉴얼 &amp; FAQ</a>
-        <span>·</span>
-        <span>티켓팅 참고: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #94a3b8; text-decoration: underline;">tickettime.co.kr ↗</a></span>
+      <div class="mt-1">
+        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
       </div>
     </footer>
   </div>
 
+  <script src="/clicker3d.js"></script>
   <script>
     const input = document.getElementById('quickCodeInput');
     const btn = document.getElementById('quickJoinBtn');

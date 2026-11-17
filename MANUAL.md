@@ -3,8 +3,7 @@
 QR 코드로 방당 최대 100명의 학생이 스마트폰으로 동시에 접속해 **행운의 7초(2가지 버전)**, **광클 복불복**, **실전 티켓팅 연습**을 함께 즐기고, 모든 라운드 기록을 한눈에 모아볼 수 있는 실시간 웹 앱입니다.
 
 - **웹 내장 스크린샷 매뉴얼 (PC 메뉴 선택형 / 모바일 스크롤형)**: 앱 내 `/manual` 페이지에서 PC 화면 기준·모바일 화면 기준 실제 스크린샷과 Q&A를 바로 확인할 수 있습니다.
-- **제작 및 수업 자료 블로그**: [math-tong 공식 블로그 (https://blog.naver.com/math-tong)](https://blog.naver.com/math-tong)
-- **티켓팅 서버시간 참고 사이트**: [티켓타임 (https://www.tickettime.co.kr/)](https://www.tickettime.co.kr/)
+- **Copyright**: Copyright © 2026 [math-tong](https://blog.naver.com/math-tong). All rights reserved.
 
 ---
 

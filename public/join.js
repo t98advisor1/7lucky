@@ -60,7 +60,9 @@ const pLucky7RankText = document.getElementById('pLucky7RankText');
 const pStageClicker = document.getElementById('pStageClicker');
 const pClickerTimeLeft = document.getElementById('pClickerTimeLeft');
 const pClickerCount = document.getElementById('pClickerCount');
+const playerClicker3dBox = document.getElementById('playerClicker3dBox');
 const pClickerTapBtn = document.getElementById('pClickerTapBtn');
+const playerClickerArena = window.createClicker3DArena ? window.createClicker3DArena(playerClicker3dBox, { maxBalls: 45 }) : null;
 
 const pStageTicketing = document.getElementById('pStageTicketing');
 const pTicketLiveClock = document.getElementById('pTicketLiveClock');
@@ -380,6 +382,7 @@ socket.on('game:start', ({ mode, options, endsAt, serverNow }) => {
     clickerActive = true;
     pClickerCount.textContent = '0회';
     pClickerTapBtn.disabled = false;
+    if (playerClickerArena) playerClickerArena.start();
 
     localTimerInterval = setInterval(() => {
       const remMs = Math.max(0, endsAt - (Date.now() + clockSkew));
@@ -446,6 +449,7 @@ pClickerTapBtn.addEventListener('pointerdown', (e) => {
   if (!clickerActive) return;
   clickerCount += 1;
   pClickerCount.textContent = `${clickerCount}회`;
+  if (playerClickerArena) playerClickerArena.burst(2);
   if (navigator.vibrate) navigator.vibrate(8);
 });
 

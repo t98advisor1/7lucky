@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>방장 전광판 · 행운의 7초 &amp; 교실 복불복</title>
+  <title>우리 반 실시간 전광판 · 딱 7.000초를 잡아라!</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
       <div class="flex items-center gap-2">
         <a href="/" class="btn btn-outline btn-sm">홈</a>
-        <h2 style="margin: 0; letter-spacing: -0.01em;">방장 전광판</h2>
+        <h2 style="margin: 0;"><span class="point-gold">딱 7.000초!</span> 우리 반 실시간 전광판</h2>
         <span id="roundBadge" class="badge">대기 중</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
@@ -189,9 +189,6 @@
                 </select>
               </div>
             </div>
-            <div class="text-muted" style="font-size: 0.8rem;">
-              서버시간 측정 참고 사이트: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (https://www.tickettime.co.kr/) ↗</a>
-            </div>
           </div>
         </div>
 
@@ -228,6 +225,8 @@
               <div id="hostLiveSub" class="text-muted mt-1">학생들이 기록을 제출하고 있습니다...</div>
             </div>
 
+            <div id="hostClicker3dBox" class="clicker-3d-stage hidden"></div>
+
             <div id="liveResultsContainer" class="mt-2"></div>
           </div>
 
@@ -256,8 +255,13 @@
     </div>
 
     <footer class="text-center mt-3" style="padding: 16px 0 8px; border-top: 1px solid var(--border); font-size: 0.84rem; color: var(--text-muted);">
-      모든 참여자 닉네임과 기록은 데이터베이스에 저장되지 않으며, 서버 메모리(RAM)에서만 일시 동작 후 자동 삭제됩니다. ·
-      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 700; text-decoration: underline;">math-tong 공식 블로그 ↗</a>
+      <div class="mb-2">
+        <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
+      </div>
+      <div>모든 참여자 닉네임과 기록은 데이터베이스에 저장되지 않으며, 서버 메모리(RAM)에서만 일시 동작 후 자동 삭제됩니다.</div>
+      <div class="mt-1">
+        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
+      </div>
     </footer>
   </div>
 
@@ -284,6 +288,7 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/clicker3d.js"></script>
   <script src="/host.js"></script>
 </body>
 </html>

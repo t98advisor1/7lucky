@@ -44,8 +44,10 @@ const countdownNumber = document.getElementById('countdownNumber');
 const playingModeLabel = document.getElementById('playingModeLabel');
 const hostLiveClock = document.getElementById('hostLiveClock');
 const hostLiveSub = document.getElementById('hostLiveSub');
+const hostClicker3dBox = document.getElementById('hostClicker3dBox');
 const liveResultsContainer = document.getElementById('liveResultsContainer');
 const endGameBtn = document.getElementById('endGameBtn');
+const hostClickerArena = window.createClicker3DArena ? window.createClicker3DArena(hostClicker3dBox, { maxBalls: 55 }) : null;
 
 const winnerName = document.getElementById('winnerName');
 const winnerDetail = document.getElementById('winnerDetail');
@@ -245,11 +247,18 @@ function renderRoomState(state) {
 
   if (state.status === 'finished' && state.currentRound) {
     stopStageTimers();
+    if (hostClickerArena) hostClickerArena.stop();
     renderFinishedStage(state.currentRound);
   }
 }
 
 function renderLiveResults(mode, results) {
+  if (hostClicker3dBox) {
+    hostClicker3dBox.classList.toggle('hidden', mode !== 'clicker');
+    if (mode === 'clicker' && hostClickerArena) {
+      hostClickerArena.burst(3);
+    }
+  }
   if (mode === 'lucky7') {
     if (results.length === 0) {
       liveResultsContainer.innerHTML = '<div class="text-center text-muted">아직 멈춘 학생이 없습니다...</div>';

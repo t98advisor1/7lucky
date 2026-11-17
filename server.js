@@ -15,6 +15,18 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 3000;
 const MAX_PLAYERS = 100;
+const MAX_ROOMS = 50;
+
+function getKstDateKey() {
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return now.toISOString().slice(0, 10);
+}
+
+const visitorStats = {
+  dateKey: getKstDateKey(),
+  today: 0,
+  total: 0,
+};
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -46,6 +58,27 @@ app.get('/practice', (req, res) => {
 
 app.get('/manual', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'manual.html'));
+});
+
+app.get('/api/visitors', (req, res) => {
+  const currentKey = getKstDateKey();
+  if (visitorStats.dateKey !== currentKey) {
+    visitorStats.dateKey = currentKey;
+    visitorStats.today = 0;
+  }
+  if (req.query.hit === '1') {
+    visitorStats.today += 1;
+    visitorStats.total += 1;
+  }
+  const onlineCount = Math.max(1, io.engine ? io.engine.clientsCount : 1);
+  res.json({
+    online: onlineCount,
+    today: Math.max(1, visitorStats.today),
+    total: Math.max(1, visitorStats.total),
+    activeRooms: rooms.size,
+    maxRooms: MAX_ROOMS,
+    maxPlayersPerRoom: MAX_PLAYERS,
+  });
 });
 
 // --- Network & QR Helpers ---
@@ -272,6 +305,21 @@ function createDefaultOptions() {
 }
 
 function createRoom(hostSocketId) {
+  if (rooms.size >= MAX_ROOMS) {
+    // Evict oldest inactive room if limit reached
+    let oldestCode = null;
+    let oldestTime = Infinity;
+    for (const [c, r] of rooms.entries()) {
+      if (r.lastActivityAt < oldestTime) {
+        oldestTime = r.lastActivityAt;
+        oldestCode = c;
+      }
+    }
+    if (oldestCode) {
+      clearRoomTimers(rooms.get(oldestCode));
+      rooms.delete(oldestCode);
+    }
+  }
   const code = generateRoomCode();
   const room = {
     code,

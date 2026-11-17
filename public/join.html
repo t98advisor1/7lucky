@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>참여하기 · 행운의 7초 &amp; 교실 복불복</title>
+  <title>참여하기 · 딱 7.000초를 잡아라! 우리 반 실시간 대항전</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -19,7 +19,7 @@
 
     <!-- 1. Join Form View -->
     <div id="joinFormView" class="card">
-      <h2 style="margin-top: 0;">게임 참여하기</h2>
+      <h2 style="margin-top: 0;"><span class="point-gold">딱 7.000초!</span> 우리 반 대항전 입장</h2>
       <p class="text-muted" style="font-size: 0.92rem;">방장 화면의 코드와 내 닉네임을 입력하세요.</p>
 
       <div class="mt-2">
@@ -101,12 +101,13 @@
       <!-- Playing Stage: Clicker -->
       <div id="pStageClicker" class="card text-center hidden">
         <div class="flex justify-between items-center mb-2">
-          <span class="badge badge-danger">광클 진행 중</span>
-          <span id="pClickerTimeLeft" style="font-weight: 800; font-size: 1.1rem; color: #fcd34d;">10.0초</span>
+          <span class="badge badge-danger">3D 광클 진행 중</span>
+          <span id="pClickerTimeLeft" style="font-weight: 800; font-size: 1.1rem; color: #fde047;">10.0초</span>
         </div>
-        <div id="pClickerCount" style="font-size: 3.5rem; font-weight: 900; color: #ffffff;">0회</div>
-        <button id="pClickerTapBtn" class="tap-pad mt-2">
-          여기를 연타하세요
+        <div id="pClickerCount" class="display-font" style="font-size: 3.4rem; font-weight: 700; color: #ffffff;">0회</div>
+        <div id="playerClicker3dBox" class="clicker-3d-stage"></div>
+        <button id="pClickerTapBtn" class="tap-pad mt-2" style="min-height: 155px;">
+          여기를 연타하세요! (3D 볼 발사)
         </button>
       </div>
 
@@ -153,11 +154,18 @@
     </div>
 
     <footer class="text-center mt-3" style="padding: 14px 0 0; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-muted);">
-      서버 DB 무저장 (RAM 일시 처리) · <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 700; text-decoration: underline;">math-tong 공식 블로그 ↗</a>
+      <div class="mb-2">
+        <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
+      </div>
+      <div>서버 DB 무저장 (RAM 일시 처리)</div>
+      <div class="mt-1">
+        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
+      </div>
     </footer>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/clicker3d.js"></script>
   <script src="/join.js"></script>
 </body>
 </html>

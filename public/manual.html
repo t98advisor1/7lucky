@@ -345,9 +345,7 @@
         <a href="/host" class="btn btn-primary btn-sm">방장 전광판 열기</a>
         <a href="/practice" class="btn btn-outline btn-sm">혼자 연습하기</a>
       </div>
-      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-accent btn-sm">
-        math-tong 공식 블로그 바로가기 ↗
-      </a>
+      <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
     </div>
 
     <!-- Header & View Mode Switcher -->
@@ -355,7 +353,9 @@
       <div class="flex items-center justify-between flex-wrap gap-3">
         <div>
           <span class="badge badge-accent">실제 화면 스크린샷 수록 · PC &amp; 모바일 겸용</span>
-          <h1 style="margin: 10px 0 6px; font-size: 1.9rem;">행운의 7초 &amp; 교실 복불복 상세 사용 설명서</h1>
+          <h1 style="margin: 10px 0 6px; font-size: 1.95rem;">
+            <span class="point-gold">딱 7.000초를 잡아라!</span> 우리 반 실시간 대항전 설명서
+          </h1>
           <p class="text-muted" style="margin: 0; font-size: 0.94rem; line-height: 1.55;">
             PC에서는 왼쪽 <strong>메뉴바를 클릭</strong>해 각 기능의 실제 PC 스크린샷을 확인하고, 모바일에서는 <strong>아래로 스크롤</strong>하며 모바일 스크린샷으로 전체 과정을 확인하세요.
           </p>
@@ -539,7 +539,7 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:31</span>
             <div class="kakao-bubble-right">
-              한 게임에 몇 명까지 참여 가능한가요? 여러 선생님이 동시에 이 앱에 접속해서 각자 다른 QR 코드로 사용해도 상관없나요?
+              방은 동시에 몇 개까지 개설할 수 있나요? 그리고 한 방에 몇 명까지, 전체 동시 접속은 몇 명까지 원활하게 가능한가요?
             </div>
           </div>
           <div class="kakao-msg-left">
@@ -547,8 +547,10 @@
             <div class="kakao-left-content">
               <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
               <div class="kakao-bubble-left">
-                네! <strong>방 1개(한 게임)당 최대 100명</strong>까지 동시에 참여할 수 있습니다.<br />
-                또한 여러 선생님이 동시에 사이트에 접속하셔도 방을 만들 때마다 <strong>서로 다른 6자리 방 코드와 개별 QR 코드</strong>가 생성되므로, 각 반에서 동시에 진행하셔도 기록이 절대 섞이지 않습니다.
+                <strong>1) 동시 방 개설 개수: 최대 50개 방 동시 운영 가능</strong><br />
+                여러 선생님이 동시에 접속하셔도 방을 열 때마다 <strong>서로 다른 6자리 방 코드와 전용 QR 코드</strong>가 발급됩니다. 최대 50개 학급이 동시에 각자 방을 열어 진행해도 데이터가 절대 섞이지 않습니다.<br /><br />
+                <strong>2) 방 1개당 최대 인원: 100명 동시 참여</strong><br />
+                한 게임방당 최대 100명까지 입장할 수 있습니다. <strong>행운의 7초</strong>와 <strong>티켓팅 연습</strong>은 패킷이 가벼워 100명 전원 동시 참여 시에도 지연 없이 즉시 집계되며, <strong>3D 광클 복불복</strong>도 250ms 묶음 전송 최적화와 기기 자체 Three.js 3D 렌더링 덕분에 다수 인원이 동시에 연타해도 끊김 없이 작동합니다.
               </div>
             </div>
             <span class="kakao-time">오전 10:31</span>
@@ -579,7 +581,7 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:35</span>
             <div class="kakao-bubble-right">
-              티켓팅 연습에서는 어떤 서버들을 고를 수 있나요? 참고한 사이트도 있나요?
+              광클 복불복의 3D 효과와 티켓팅 연습의 서버 선택은 어떻게 작동하나요?
             </div>
           </div>
           <div class="kakao-msg-left">
@@ -587,7 +589,8 @@
             <div class="kakao-left-content">
               <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
               <div class="kakao-bubble-left">
-                <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer">티켓타임(tickettime.co.kr)</a>의 서버시간 분류를 참고하여 <strong>공연·콘서트(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스, 쿠팡플레이 등)</strong>, <strong>교통·캠핑(코레일 KTX, SRT, 국립공원, 숲나들e 등)</strong>, <strong>영화·스포츠(CGV, 프로야구 등)</strong>, <strong>전국 대학 수강신청 및 직접 도메인 입력</strong>까지 총 40여 개 서버를 선택해 연습하실 수 있습니다.
+                • <strong>3D 광클 복불복</strong>: 화면을 터치할 때마다 <strong>Three.js 3D 엔진</strong>으로 입체 네온 볼과 스파크가 화면 속에서 역동적으로 튀어 오르며, 1등·꼴찌·중간순위(눈치게임)·랜덤순위 당첨 규칙을 고를 수 있습니다.<br />
+                • <strong>실전 티켓팅 연습</strong>: 공연·콘서트(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스 등), 교통·캠핑(코레일 KTX, SRT, 국립공원 등), 영화·스포츠, 전국 대학 수강신청 및 직접 도메인 입력까지 <strong>40여 개 서버</strong>를 선택해 정각 클릭과 포도알 좌석 잡기를 연습할 수 있습니다.
               </div>
             </div>
             <span class="kakao-time">오전 10:35</span>
@@ -669,11 +672,16 @@
     </div>
 
     <footer class="text-center mt-3" style="padding: 20px 0 0; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
-      Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 800; text-decoration: underline;">math-tong 공식 블로그 ↗</a> ·
-      티켓팅 서버시간 참고: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (tickettime.co.kr) ↗</a>
+      <div class="mb-2">
+        <div class="visitor-pill" data-visitor-box>방문자 집계 불러오는 중...</div>
+      </div>
+      <div>
+        Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fde047; font-weight: 800; text-decoration: underline;">math-tong</a>. All rights reserved.
+      </div>
     </footer>
   </div>
 
+  <script src="/clicker3d.js"></script>
   <script>
     const PC_STEPS = [
       {
@@ -727,7 +735,7 @@
       {
         badge: 'MENU 5 · 티켓팅 연습',
         title: '5. 실전 티켓팅 연습 — 예매처별 서버시간 연동 & 포도알 좌석 잡기',
-        desc: '티켓타임(tickettime.co.kr)의 주요 예매처 서버 목록(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스, 코레일 KTX, SRT, 전국 대학 수강신청 등)을 선택해 카운트다운 후 정각 클릭과 보라색 좌석(포도알) 선택 속도를 겨룹니다.',
+        desc: '주요 예매처 서버 목록(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스, 코레일 KTX, SRT, 전국 대학 수강신청 등 40여 종)을 선택해 카운트다운 후 정각 클릭과 보라색 좌석(포도알) 선택 속도를 겨룹니다.',
         img: '/screenshots/pc-5-ticketing.png',
         urlBar: 'https://lucky7-classroom-app.onrender.com/host (티켓팅 연습 전광판)',
         features: [
@@ -757,7 +765,7 @@
         features: [
           ['행운의 7초 혼자 연습 (버전 1 / 버전 2)', '숫자가 끝까지 보이는 버전과 3초 후 블라인드되는 버전을 직접 고르고 내 최고 기록을 경신할 수 있습니다.'],
           ['예매처 서버시간 동기화 & 직접 도메인 입력', '원하는 예매처 서버를 고르거나 대학교 수강신청 주소를 직접 입력해 내 기기와의 시계 오차(ms) 및 왕복 지연(RTT)을 측정합니다.'],
-          ['참고 사이트 안내', '서버시간 개념 및 측정 방식은 티켓타임(https://www.tickettime.co.kr/)을 참고하여 교실 학습용으로 구현되었습니다.']
+          ['포도알 좌석 선택 연습', '정각 클릭 직후 보라색 좌석을 빠르게 캐치하는 실전 감각을 모바일과 PC 모두에서 훈련할 수 있습니다.']
         ]
       },
       {
