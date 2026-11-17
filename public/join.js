@@ -312,6 +312,13 @@ socket.on('room:closed_by_admin', () => {
   window.location.href = '/';
 });
 
+socket.on('room:expired', () => {
+  alert('방 개설 후 60분이 지나 자동으로 종료되었습니다.');
+  sessionStorage.removeItem('playerId');
+  sessionStorage.removeItem('playerRoomCode');
+  window.location.href = '/';
+});
+
 socket.on('game:countdown', async ({ mode, options, countdownEndsAt, serverNow }) => {
   stopAllTimers();
   hideAllStages();

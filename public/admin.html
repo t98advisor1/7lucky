@@ -247,7 +247,7 @@
             <td>${getStatusBadge(r.status)}</td>
             <td><strong>${r.playerCount}</strong> / 100명 <span class="text-muted">(접속 ${r.connectedCount})</span></td>
             <td>${r.roundNumber}라운드 (기록 ${r.historyCount})</td>
-            <td>${formatAgo(r.lastActivityAt)}</td>
+            <td>${formatAgo(r.lastActivityAt)} <span class="text-muted">(잔여 ${Math.max(0, 60 - Math.floor((Date.now() - r.createdAt) / 60000))}분)</span></td>
             <td>
               <button class="btn btn-danger btn-sm" onclick="deleteRoom('${r.code}')">방 삭제</button>
             </td>

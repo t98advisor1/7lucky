@@ -573,16 +573,19 @@ function finalizeCurrentRound(room) {
   broadcastRoomState(room);
 }
 
-// Cleanup stale rooms every 30 minutes
+const ROOM_TTL_MS = 60 * 60 * 1000; // Auto-release room 60 minutes after creation
+
+// Cleanup rooms 60 minutes after creation (checked every 1 minute)
 setInterval(() => {
   const now = Date.now();
   for (const [code, room] of rooms.entries()) {
-    if (now - room.lastActivityAt > 3 * 60 * 60 * 1000) {
+    if (now - room.createdAt >= ROOM_TTL_MS) {
       clearRoomTimers(room);
+      io.to(`room:${code}`).emit('room:expired');
       rooms.delete(code);
     }
   }
-}, 30 * 60 * 1000);
+}, 60 * 1000);
 
 // --- Socket.IO Events ---
 io.on('connection', (socket) => {

@@ -418,6 +418,12 @@ socket.on('room:closed_by_admin', () => {
   window.location.href = '/';
 });
 
+socket.on('room:expired', () => {
+  sessionStorage.removeItem('hostRoomCode');
+  alert('방 개설 후 60분이 지나 자동으로 해제되었습니다.');
+  window.location.href = '/';
+});
+
 socket.on('game:countdown', async ({ mode, options, countdownSec, countdownEndsAt, serverNow }) => {
   stopStageTimers();
   const clockSkew = serverNow - Date.now();
