@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: lucky7-classroom-app
+    name: lucky7kr
     runtime: node
     plan: free
     buildCommand: npm install

@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>사용 설명서 (PC · 모바일 매뉴얼) · 행운의 7초 &amp; 교실 복불복</title>
+  <title>사용 설명서 (PC · 모바일 매뉴얼) · 딱 7.000초를 잡아라!</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="사용 설명서 &amp; Q&amp;A · 딱 7.000초를 잡아라! 우리 반 실시간 대항전" />
+  <meta property="og:description" content="PC 메뉴 선택형·모바일 스크롤형 실제 스크린샷 설명서와 자주 묻는 질문(Q&A) 가이드" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="/og-image.png" />
   <link rel="stylesheet" href="/styles.css" />
   <style>
     .manual-header {
@@ -334,6 +342,141 @@
       border-radius: 14px;
       padding: 16px;
     }
+
+    /* ===== Narrow Q&A Guide (mobile-friendly reading width) ===== */
+    .qna-narrow {
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .qna-narrow .kakao-body {
+      max-height: none;
+      padding: 18px 14px;
+      gap: 18px;
+    }
+
+    .qna-narrow .kakao-bubble-right {
+      max-width: 86%;
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .qna-narrow .kakao-left-content {
+      max-width: calc(100% - 48px);
+    }
+
+    .qna-narrow .kakao-bubble-left {
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    .qna-q-label {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #191919;
+      color: #fee500;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .ans-title {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 2px 0 6px;
+    }
+
+    .ans-item {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      margin-top: 10px;
+    }
+
+    .ans-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .ans-item-body strong.ans-sub {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: #1e1b4b;
+      margin-bottom: 2px;
+    }
+
+    .ans-note {
+      margin-top: 10px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      font-size: 0.92rem;
+      color: #334155;
+    }
+
+    .ans-table {
+      width: 100%;
+      margin-top: 8px;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    .ans-table th,
+    .ans-table td {
+      border: 1px solid #e2e8f0;
+      padding: 7px 8px;
+      text-align: left;
+      color: #0f172a;
+    }
+
+    .ans-table th {
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 0.86rem;
+    }
+
+    .qna-section-head h2 {
+      font-size: 1.7rem;
+    }
+
+    .qna-section-head p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 480px) {
+      .qna-narrow .kakao-time {
+        display: none;
+      }
+      .qna-narrow .kakao-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 11px;
+      }
+      .qna-narrow .kakao-left-content {
+        max-width: calc(100% - 40px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -510,42 +653,67 @@
     <!-- ============================================================== -->
     <!-- 3. KAKAOTALK CHAT Q&A ("카카오톡 메시지 통") & SHARE BOX        -->
     <!-- ============================================================== -->
-    <div id="qna" class="mt-3" style="margin-top: 32px; scroll-margin-top: 24px;">
-      <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-        <div>
-          <span class="badge badge-accent">자주 묻는 질문 &amp; 유의사항 Q&amp;A</span>
-          <h2 style="margin: 8px 0 4px;">선생님들이 가장 궁금해하시는 Q&amp;A (톡 안내)</h2>
-        </div>
+    <div id="qna" class="qna-narrow" style="margin-top: 36px; scroll-margin-top: 24px;">
+      <div class="qna-section-head text-center mb-2">
+        <span class="badge badge-accent">자주 묻는 질문 &amp; 유의사항 Q&amp;A</span>
+        <h2 style="margin: 10px 0 6px;">선생님들이 가장 궁금해하시는 Q&amp;A 가이드</h2>
+        <p class="text-muted" style="margin: 0;">
+          PC와 모바일 어디서나 한눈에 읽기 편하도록 핵심 질문과 답변을 정리했습니다.
+        </p>
       </div>
 
-      <div class="kakao-room">
+      <div class="kakao-room mt-2">
         <div class="kakao-header">
           <div class="kakao-header-title">
-            <span>딱 7.000초를 잡아라 · 교실 대항전 Q&amp;A 안내방</span>
-            <span class="kakao-badge">실시간 가이드</span>
+            <span>딱 7.000초를 잡아라 · 교실 대항전 Q&amp;A</span>
+            <span class="kakao-badge">가이드</span>
           </div>
-          <span style="font-size: 0.82rem; font-weight: 800; color: #1e293b;">Q&amp;A 가이드</span>
+          <span style="font-size: 0.82rem; font-weight: 800; color: #1e293b;">안내 톡방</span>
         </div>
 
         <div class="kakao-body">
-          <div class="kakao-date-pill">진행 방법 및 유의사항 Q&amp;A</div>
+          <div class="kakao-date-pill">진행 방법 · 인원 기준 · 유의사항 안내</div>
 
           <!-- Q1 -->
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:31</span>
             <div class="kakao-bubble-right">
-              방은 동시에 몇 개까지 개설할 수 있나요? 그리고 한 방에 몇 명까지, 전체 동시 접속은 몇 명까지 원활하게 가능한가요?
+              <div class="qna-q-label">질문 1 · 인원 및 방 개설 기준</div><br />
+              상단에 표시되는 '50'이라는 숫자는 접속한 사람이 50명이라는 뜻인가요, 아니면 전체 동시 접속했을 때 개설 가능한 방이 50개라는 뜻인가요?
             </div>
           </div>
           <div class="kakao-msg-left">
             <div class="kakao-avatar">통</div>
             <div class="kakao-left-content">
-              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                <strong>1) 동시 방 개설 개수: 최대 50개 방 동시 운영 가능</strong><br />
-                여러 선생님이 동시에 접속하셔도 방을 열 때마다 <strong>서로 다른 6자리 방 코드와 전용 QR 코드</strong>가 발급됩니다. 최대 50개 학급이 동시에 각자 방을 열어 진행해도 데이터가 절대 섞이지 않습니다.<br /><br />
-                <strong>2) 방 1개당 최대 인원: 100명 동시 참여</strong><br />
-                한 게임방당 최대 100명까지 입장할 수 있습니다. <strong>행운의 7초</strong>와 <strong>티켓팅 연습</strong>은 패킷이 가벼워 100명 전원 동시 참여 시에도 지연 없이 즉시 집계되며, <strong>3D 광클 복불복</strong>도 250ms 묶음 전송 최적화와 기기 자체 Three.js 3D 렌더링 덕분에 다수 인원이 동시에 연타해도 끊김 없이 작동합니다.
+                <strong class="ans-title">'50명'이 아니라 동시에 개설할 수 있는 '방(학급)의 개수'가 최대 50개라는 뜻입니다!</strong>
+                헷갈리기 쉬운 인원 및 방 개설 기준을 아래 표로 명확히 구분해 드립니다.
+                <table class="ans-table">
+                  <thead>
+                    <tr>
+                      <th>구분 항목</th>
+                      <th>최대 한도 및 의미</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>동시 개설 방 개수</strong></td>
+                      <td><strong>최대 50개 방</strong> (선생님 50분이 동시에 각자 다른 QR로 수업 가능)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>방 1개당 참여 인원</strong></td>
+                      <td><strong>방마다 최대 100명</strong> (한 반 또는 학년 전체가 한 방에 입장 가능)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>전체 동시 접속 인원</strong></td>
+                      <td>구조상 <strong>최대 5,000명</strong> (50개 방 × 각 100명 동시 수용)</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="ans-note">
+                  즉 여러 선생님이 같은 시간에 접속하셔도 방을 만들 때마다 <strong>서로 다른 6자리 방 코드와 개별 QR 코드</strong>가 발급되며, 각 방마다 100명씩 독립적으로 참여할 수 있습니다.
+                </div>
               </div>
             </div>
             <span class="kakao-time">오전 10:31</span>
@@ -555,18 +723,33 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:33</span>
             <div class="kakao-bubble-right">
+              <div class="qna-q-label">질문 2 · 행운의 7초 모드</div><br />
               행운의 7초는 숫자가 끝까지 보이는 버전과 3초 후에 가려지는 버전 두 가지로 운영할 수 있나요? 혼자 연습도 되나요?
             </div>
           </div>
           <div class="kakao-msg-left">
             <div class="kakao-avatar">통</div>
             <div class="kakao-left-content">
-              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                물론입니다! 방장 화면과 개인 연습장 모두에서:<br />
-                1) <strong>[버전 1: 숫자 보임 모드]</strong> — 초시계 숫자가 끝까지 보이는 시각 반응 대결<br />
-                2) <strong>[버전 2: 3초 후 가림 모드]</strong> — 3.000초 뒤 숫자가 가려져 마음속으로 세는 블라인드 대결<br />
-                두 가지를 버튼 하나로 즉시 전환할 수 있고, <strong>[혼자 연습하기]</strong> 메뉴에서 학생·선생님 누구나 혼자 연습할 수 있습니다.
+                <strong class="ans-title">방장 전광판과 혼자 연습하기 모두에서 두 가지 버전을 지원합니다.</strong>
+                <div class="ans-item">
+                  <span class="ans-num">1</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">숫자 보임 모드 (기본 시계 노출)</strong>
+                    초시계 숫자가 0초부터 멈출 때까지 계속 표시되어 순발력과 시각 반응 타이밍을 겨룹니다.
+                  </div>
+                </div>
+                <div class="ans-item">
+                  <span class="ans-num">2</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">3초 후 가림 모드 (블라인드 감각 대결)</strong>
+                    시작 후 3.000초 뒤 숫자가 흐리게 가려져 마음속으로 남은 시간을 세어 멈추는 쫄깃한 심리전입니다.
+                  </div>
+                </div>
+                <div class="ans-note">
+                  방장이 없어도 메인 화면의 <strong>[혼자 연습장 가기]</strong> 메뉴에서 학생·선생님 누구나 두 버전을 자유롭게 연습할 수 있습니다.
+                </div>
               </div>
             </div>
             <span class="kakao-time">오전 10:33</span>
@@ -576,16 +759,30 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:35</span>
             <div class="kakao-bubble-right">
+              <div class="qna-q-label">질문 3 · 3D 광클 &amp; 티켓팅 서버</div><br />
               광클 복불복의 3D 효과와 티켓팅 연습의 서버 선택은 어떻게 작동하나요?
             </div>
           </div>
           <div class="kakao-msg-left">
             <div class="kakao-avatar">통</div>
             <div class="kakao-left-content">
-              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                • <strong>3D 광클 복불복</strong>: 화면을 터치할 때마다 <strong>Three.js 3D 엔진</strong>으로 입체 네온 볼과 스파크가 화면 속에서 역동적으로 튀어 오르며, 1등·꼴찌·중간순위(눈치게임)·랜덤순위 당첨 규칙을 고를 수 있습니다.<br />
-                • <strong>실전 티켓팅 연습</strong>: 공연·콘서트(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스 등), 교통·캠핑(코레일 KTX, SRT, 국립공원 등), 영화·스포츠, 전국 대학 수강신청 및 직접 도메인 입력까지 <strong>40여 개 서버</strong>를 선택해 정각 클릭과 포도알 좌석 잡기를 연습할 수 있습니다.
+                <strong class="ans-title">Three.js 3D 입체 연출과 40여 개 실전 서버시간 동기화를 지원합니다.</strong>
+                <div class="ans-item">
+                  <span class="ans-num">1</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">3D 광클 복불복 (입체 바운싱 볼 연출)</strong>
+                    화면을 터치할 때마다 Three.js 3D 엔진으로 입체 네온 볼과 스파크가 화면 속에서 역동적으로 튀어 오르며, 1등·꼴찌·중간순위(눈치게임)·랜덤순위 당첨 규칙을 고를 수 있습니다.
+                  </div>
+                </div>
+                <div class="ans-item">
+                  <span class="ans-num">2</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">실전 티켓팅 &amp; 포도알 연습 (40여 개 서버)</strong>
+                    공연·콘서트(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스 등), 교통·캠핑(코레일 KTX, SRT, 국립공원 등), 영화·스포츠, 전국 대학 수강신청 및 직접 도메인 입력까지 선택해 정각 클릭과 좌석 잡기를 연습합니다.
+                  </div>
+                </div>
               </div>
             </div>
             <span class="kakao-time">오전 10:35</span>
@@ -595,18 +792,30 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:37</span>
             <div class="kakao-bubble-right">
+              <div class="qna-q-label">질문 4 · 개인정보 및 서버 저장</div><br />
               학생들이 적는 닉네임이나 기록이 서버에 얼마나 저장되나요? 개인정보가 남지 않나요?
             </div>
           </div>
           <div class="kakao-msg-left">
             <div class="kakao-avatar">통</div>
             <div class="kakao-left-content">
-              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                <strong>서버 디스크나 데이터베이스(DB)에는 단 1바이트도 영구 저장되지 않습니다!</strong><br />
-                • 진행 중인 방의 닉네임과 점수만 서버의 <strong>임시 메모리(RAM)</strong>에 잠깐 올라가며,<br />
-                • 방장이 <strong>[기록 초기화]</strong>나 <strong>[새 방 만들기]</strong>를 누르면 즉시 메모리에서 완전히 삭제됩니다.<br />
-                • 창을 그냥 닫더라도 마지막 활동 후 <strong>3시간이 지나면 메모리에서 자동 소멸</strong>되므로 서버에는 아무것도 남지 않습니다. 필요한 기록은 수업 직후 <strong>[CSV 다운로드]</strong>로 선생님 PC에 내려받으세요!
+                <strong class="ans-title">서버 디스크나 데이터베이스(DB)에는 단 1바이트도 영구 저장되지 않습니다.</strong>
+                <div class="ans-item">
+                  <span class="ans-num">1</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">휘발성 메모리(RAM) 일시 처리</strong>
+                    진행 중인 방의 닉네임과 점수만 서버 메모리에 잠깐 올라가며 외부 DB를 전혀 사용하지 않습니다.
+                  </div>
+                </div>
+                <div class="ans-item">
+                  <span class="ans-num">2</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">즉시 삭제 및 3시간 후 자동 소멸</strong>
+                    방장이 <strong>[기록 초기화]</strong>나 <strong>[새 방 만들기]</strong>를 누르면 즉시 메모리에서 삭제되며, 그냥 닫더라도 3시간 후 자동 소멸됩니다. 보관이 필요한 기록만 <strong>[CSV 다운로드]</strong>로 PC에 저장하세요.
+                  </div>
+                </div>
               </div>
             </div>
             <span class="kakao-time">오전 10:37</span>
@@ -616,6 +825,7 @@
           <div class="kakao-msg-right">
             <span class="kakao-time">오전 10:39</span>
             <div class="kakao-bubble-right">
+              <div class="qna-q-label">질문 5 · 발표자 뽑기 &amp; 크롬북 보호</div><br />
               수업 시간에 발표자를 뽑을 때나 1인 1스마트기기(크롬북·태블릿)로 진행할 때 키보드가 망가지진 않을지 걱정되는데 좋은 팁이 있을까요?
             </div>
           </div>
@@ -624,10 +834,28 @@
             <div class="kakao-left-content">
               <div class="kakao-sender-name">Q&amp;A 안내봇</div>
               <div class="kakao-bubble-left">
-                <strong>교실 발표자 선정 &amp; 크롬북 보호 꿀팁 3가지!</strong><br />
-                1) <strong>키보드 연타 방지 설계</strong>: 본 앱의 광클 복불복은 키보드(스페이스바·엔터) 연타가 아닌 <strong>화면 터치 또는 마우스 클릭(`pointerdown`)</strong>으로만 작동하도록 설계되어 키보드 파손을 예방합니다.<br />
-                2) <strong>크롬북 보호용 '중간 순위(눈치게임)' &amp; '행운의 7초' 활용</strong>: 무작정 세게 연타하는 대신 광클 복불복의 당첨 기준을 <strong>[중간 순위 당첨(눈치게임)]</strong>이나 <strong>[랜덤 순위 당첨]</strong>으로 바꾸거나, 단 한 번의 클릭으로 승부하는 <strong>[행운의 7초]</strong>로 발표자를 뽑으면 기기에 무리를 주지 않고도 아이들의 참여율을 폭발적으로 높일 수 있습니다.<br />
-                3) <strong>수업 1분 전 워밍업</strong>: 무료 클라우드(Render)는 15분 미접속 시 절전 모드로 들어가므로, 수업 시작 1분 전에 선생님 PC에서 방장 화면을 미리 한 번 열어두시면 학생들이 즉시 쾌적하게 입장합니다.
+                <strong class="ans-title">교실 발표자 선정 &amp; 크롬북 보호를 위한 3가지 안전 설계가 적용되어 있습니다.</strong>
+                <div class="ans-item">
+                  <span class="ans-num">1</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">키보드 연타 방지 설계</strong>
+                    광클 복불복은 키보드(스페이스바·엔터) 연타가 작동하지 않으며, 화면 터치스크린 또는 마우스 클릭으로만 작동해 키보드 파손을 예방합니다.
+                  </div>
+                </div>
+                <div class="ans-item">
+                  <span class="ans-num">2</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">중간 순위(눈치게임) &amp; 행운의 7초 활용</strong>
+                    무작정 세게 연타하는 대신 당첨 기준을 <strong>[중간 순위 당첨(눈치게임)]</strong>으로 바꾸거나, 단 한 번의 클릭으로 승부하는 <strong>[행운의 7초]</strong>로 발표자를 뽑으면 기기 부담 없이 참여율을 높일 수 있습니다.
+                  </div>
+                </div>
+                <div class="ans-item">
+                  <span class="ans-num">3</span>
+                  <div class="ans-item-body">
+                    <strong class="ans-sub">수업 시작 1분 전 전광판 열기</strong>
+                    무료 클라우드 특성상 15분 미접속 시 절전 모드로 들어가므로, 수업 1분 전에 선생님 PC에서 방장 화면을 미리 열어두시면 즉시 쾌적하게 입장합니다.
+                  </div>
+                </div>
               </div>
             </div>
             <span class="kakao-time">오전 10:39</span>
@@ -635,7 +863,7 @@
         </div>
 
         <div class="kakao-footer">
-          <div style="font-size: 0.85rem; color: #334155; font-weight: 700;">
+          <div style="font-size: 0.88rem; color: #334155; font-weight: 700;">
             학급 발표자 선정 · 모둠 대표 뽑기 · 학급 레크리에이션에 자유롭게 활용하세요.
           </div>
         </div>
@@ -645,17 +873,18 @@
       <div class="card mt-3 kakao-share-box">
         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
           <div>
-            <strong style="color: #fcd34d; font-size: 1rem;">카카오톡 단톡방 공유용 안내 메시지 (1클릭 복사)</strong>
-            <div class="text-muted" style="font-size: 0.84rem;">학급 단톡방이나 동료 선생님께 공유할 때 아래 버튼을 눌러 그대로 붙여넣으세요.</div>
+            <strong style="color: #fde047; font-size: 1.05rem;">카카오톡 단톡방 공유용 안내 메시지 (1클릭 복사)</strong>
+            <div class="text-muted" style="font-size: 0.88rem;">학급 단톡방이나 동료 선생님께 공유할 때 아래 버튼을 눌러 그대로 붙여넣으세요.</div>
           </div>
           <button type="button" id="copyKakaoMsgBtn" class="btn btn-accent btn-sm">카톡 안내 문구 복사하기</button>
         </div>
-        <pre id="kakaoShareText" style="margin: 0; padding: 12px; border-radius: 10px; background: rgba(11, 16, 32, 0.85); color: #f8fafc; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; font-family: inherit;">[딱 7.000초를 잡아라! · 우리 반 실시간 손가락 대항전 안내]
-• 참여 방법: 화면의 QR 코드 스캔 또는 방 코드 6자리 입력 후 닉네임 입장 (방당 최대 100명 / 동시 50개 방 개설 가능)
-• 게임 종목:
-  1) 행운의 7초 (버전 1: 숫자 보임 / 버전 2: 3초 후 블라인드)
-  2) 3D 광클 복불복 (1등 / 꼴찌 / 중간순위 눈치게임 / 랜덤순위 당첨)
-  3) 실전 티켓팅 &amp; 포도알 연습 (40여 개 예매처·대학 수강신청 서버시간 동기화)
+        <pre id="kakaoShareText" style="margin: 0; padding: 14px; border-radius: 10px; background: rgba(11, 16, 32, 0.85); color: #f8fafc; font-size: 0.92rem; line-height: 1.65; white-space: pre-wrap; font-family: inherit;">[딱 7.000초를 잡아라! · 우리 반 실시간 손가락 대항전 안내]
+• 참여 방법: 화면의 QR 코드 스캔 또는 방 코드 6자리 입력 후 닉네임 입장
+• 참여 인원: 방당 최대 100명 동시 참여 (최대 50개 학급 방 동시 개설 가능)
+• 대항전 종목:
+  ▪ 행운의 7초 (숫자 보임 모드 / 3초 후 블라인드 모드)
+  ▪ 3D 광클 복불복 (1등 / 꼴찌 / 중간순위 눈치게임 / 랜덤순위 당첨)
+  ▪ 실전 티켓팅 &amp; 포도알 연습 (40여 개 예매처·대학 수강신청 서버시간 동기화)
 • 개인정보 안내: 서버 데이터베이스 무저장 (메모리 일시 처리 후 자동 완전 삭제)</pre>
       </div>
     </div>

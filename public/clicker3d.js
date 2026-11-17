@@ -16,7 +16,7 @@
         <span class="v-sep">·</span>
         <span class="v-item">누적 방문 <strong>${data.total.toLocaleString()}</strong>명</span>
         <span class="v-sep">·</span>
-        <span class="v-item">개설된 방 <strong>${data.activeRooms} / ${data.maxRooms}</strong>개</span>
+        <span class="v-item">개설된 방 <strong>${data.activeRooms}</strong>개 <small>(최대 ${data.maxRooms}개 방 · 방당 100명)</small></span>
       `;
       boxes.forEach((el) => {
         el.innerHTML = html;
