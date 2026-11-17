@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 모니터링 &amp; 방 초기화 · 딱 7.000초를 잡아라!</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .stat-card {
+      background: rgba(18, 26, 47, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #fde047;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding-top: 28px; padding-bottom: 48px;">
+    <!-- Top Header -->
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <a href="/" class="btn btn-outline btn-sm">홈</a>
+        <a href="/host" class="btn btn-outline btn-sm">방장 전광판</a>
+        <h2 style="margin: 0;"><span class="point-gold">관리자 모드</span> · 방 현황 &amp; 초기화</h2>
+      </div>
+      <button id="logoutBtn" class="btn btn-outline btn-sm hidden">잠금(로그아웃)</button>
+    </div>
+
+    <!-- 1. Login View -->
+    <div id="loginView" class="card" style="max-width: 420px; margin: 48px auto;">
+      <span class="badge badge-accent">ADMIN ACCESS</span>
+      <h2 style="margin: 12px 0 6px;">관리자 비밀번호 입력</h2>
+      <p class="text-muted" style="font-size: 0.92rem; line-height: 1.55;">
+        현재 개설된 모든 방의 상태를 조회하거나 일괄 초기화하려면 관리자 숫자 비밀번호를 입력하세요.
+      </p>
+
+      <div class="mt-3">
+        <label class="text-muted" style="font-size: 0.84rem;">관리자 비밀번호 (숫자)</label>
+        <input
+          id="adminPwInput"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          class="input mt-1 text-center"
+          placeholder="숫자 비밀번호 입력"
+          style="font-family: var(--font-mono); font-size: 1.3rem; letter-spacing: 6px;"
+        />
+      </div>
+
+      <div id="loginError" class="text-center mt-2 hidden" style="color: #fca5a5; font-size: 0.9rem;"></div>
+
+      <button id="loginBtn" class="btn btn-primary btn-lg w-full mt-3">관리자 화면 열기</button>
+
+      <div class="text-muted mt-3" style="font-size: 0.8rem; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 12px;">
+        기본 비밀번호는 <code>7777</code>이며, Render 대시보드 <strong>Environment → ADMIN_PASSWORD</strong> 환경변수를 추가하면 원하는 숫자로 즉시 변경할 수 있습니다.
+      </div>
+    </div>
+
+    <!-- 2. Admin Dashboard View -->
+    <div id="dashboardView" class="hidden flex flex-col gap-3 mt-2">
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">현재 개설된 방</div>
+          <div class="stat-value" id="statRooms">0 / 50</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">방 참여 학생 수</div>
+          <div class="stat-value" id="statPlayers" style="color: #6ee7b7;">0명</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">실시간 연결 소켓</div>
+          <div class="stat-value" id="statSockets" style="color: #93c5fd;">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">오늘 / 누적 방문</div>
+          <div class="stat-value" id="statVisitors" style="font-size: 1.45rem; color: #f8fafc;">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="card flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="refreshBtn" class="btn btn-primary btn-sm">지금 새로고침</button>
+          <label class="flex items-center gap-1 text-muted" style="font-size: 0.88rem; cursor: pointer;">
+            <input type="checkbox" id="autoRefreshCheck" checked /> 5초마다 자동 갱신
+          </label>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="resetAllRoomsBtn" class="btn btn-danger btn-sm">모든 방 일괄 초기화</button>
+          <button id="resetAllWithVisitorsBtn" class="btn btn-outline btn-sm" style="border-color: rgba(239,68,68,0.5); color: #fca5a5;">
+            방 + 방문자 집계 모두 초기화
+          </button>
+        </div>
+      </div>
+
+      <!-- Room List Table -->
+      <div class="card">
+        <div class="flex items-center justify-between mb-2">
+          <h3 style="margin: 0;">개설된 방 실시간 목록</h3>
+          <span class="text-muted" id="lastUpdatedLabel" style="font-size: 0.82rem;">-</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>방 코드</th>
+                <th>현재 게임</th>
+                <th>진행 상태</th>
+                <th>참여 인원 (접속)</th>
+                <th>완료 라운드</th>
+                <th>마지막 활동</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="roomsTableBody">
+              <tr><td colspan="7" class="text-center text-muted">불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center mt-3" style="padding: 20px 0 0; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
+      <div style="font-weight: 700; color: #e2e8f0;">
+        Copyright © math-tong. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const loginView = document.getElementById('loginView');
+    const dashboardView = document.getElementById('dashboardView');
+    const adminPwInput = document.getElementById('adminPwInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const statRooms = document.getElementById('statRooms');
+    const statPlayers = document.getElementById('statPlayers');
+    const statSockets = document.getElementById('statSockets');
+    const statVisitors = document.getElementById('statVisitors');
+    const roomsTableBody = document.getElementById('roomsTableBody');
+    const lastUpdatedLabel = document.getElementById('lastUpdatedLabel');
+
+    const refreshBtn = document.getElementById('refreshBtn');
+    const autoRefreshCheck = document.getElementById('autoRefreshCheck');
+    const resetAllRoomsBtn = document.getElementById('resetAllRoomsBtn');
+    const resetAllWithVisitorsBtn = document.getElementById('resetAllWithVisitorsBtn');
+
+    let adminPassword = sessionStorage.getItem('adminPw') || '';
+    let autoTimer = null;
+
+    function getModeLabel(mode) {
+      if (mode === 'lucky7') return '행운의 7초';
+      if (mode === 'clicker') return '3D 광클 복불복';
+      if (mode === 'ticketing') return '티켓팅 연습';
+      return mode;
+    }
+
+    function getStatusBadge(status) {
+      if (status === 'waiting') return '<span class="badge">대기 중</span>';
+      if (status === 'countdown') return '<span class="badge badge-accent">카운트다운</span>';
+      if (status === 'playing') return '<span class="badge badge-danger">진행 중</span>';
+      if (status === 'finished') return '<span class="badge badge-success">라운드 종료</span>';
+      return status;
+    }
+
+    function formatAgo(ts) {
+      const sec = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+      if (sec < 60) return `${sec}초 전`;
+      const min = Math.floor(sec / 60);
+      if (min < 60) return `${min}분 전`;
+      const hr = Math.floor(min / 60);
+      return `${hr}시간 ${min % 60}분 전`;
+    }
+
+    async function verifyAndLogin(pw) {
+      loginError.classList.add('hidden');
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw }),
+      });
+      if (!res.ok) {
+        loginError.textContent = '비밀번호가 일치하지 않습니다.';
+        loginError.classList.remove('hidden');
+        sessionStorage.removeItem('adminPw');
+        return false;
+      }
+      adminPassword = pw;
+      sessionStorage.setItem('adminPw', pw);
+      loginView.classList.add('hidden');
+      dashboardView.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+      await loadDashboard();
+      startAutoRefresh();
+      return true;
+    }
+
+    async function loadDashboard() {
+      if (!adminPassword) return;
+      const res = await fetch('/api/admin/rooms', {
+        headers: { 'x-admin-password': adminPassword },
+      });
+      if (res.status === 401) {
+        logout();
+        return;
+      }
+      const data = await res.json();
+      const s = data.stats;
+      statRooms.textContent = `${s.activeRooms} / ${s.maxRooms}`;
+      statPlayers.textContent = `${s.totalPlayers}명`;
+      statSockets.textContent = String(s.onlineSockets);
+      statVisitors.textContent = `${s.todayVisitors} / ${s.totalVisitors}`;
+      lastUpdatedLabel.textContent = `최근 갱신: ${new Date().toLocaleTimeString()}`;
+
+      if (!data.rooms || data.rooms.length === 0) {
+        roomsTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">현재 개설된 방이 없습니다.</td></tr>';
+        return;
+      }
+
+      roomsTableBody.innerHTML = data.rooms
+        .map(
+          (r) => `
+          <tr>
+            <td><strong style="font-family: var(--font-mono); color: #fde047; letter-spacing: 2px;">${r.code}</strong></td>
+            <td>${getModeLabel(r.mode)}</td>
+            <td>${getStatusBadge(r.status)}</td>
+            <td><strong>${r.playerCount}</strong> / 100명 <span class="text-muted">(접속 ${r.connectedCount})</span></td>
+            <td>${r.roundNumber}라운드 (기록 ${r.historyCount})</td>
+            <td>${formatAgo(r.lastActivityAt)}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteRoom('${r.code}')">방 삭제</button>
+            </td>
+          </tr>
+        `
+        )
+        .join('');
+    }
+
+    window.deleteRoom = async function (code) {
+      if (!confirm(`방 [${code}]을 강제 종료 및 삭제하시겠습니까?`)) return;
+      await fetch(`/api/admin/rooms/${encodeURIComponent(code)}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminPassword },
+      });
+      await loadDashboard();
+    };
+
+    async function resetAll(resetVisitors) {
+      const msg = resetVisitors
+        ? '개설된 모든 방과 방문자 통계를 전부 초기화하시겠습니까?'
+        : '현재 개설된 모든 방을 일괄 초기화(삭제)하시겠습니까?';
+      if (!confirm(msg)) return;
+      await fetch('/api/admin/reset-all', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': adminPassword,
+        },
+        body: JSON.stringify({ resetVisitors }),
+      });
+      await loadDashboard();
+    }
+
+    function startAutoRefresh() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        if (autoRefreshCheck.checked && adminPassword) {
+          loadDashboard();
+        }
+      }, 5000);
+    }
+
+    function logout() {
+      clearInterval(autoTimer);
+      adminPassword = '';
+      sessionStorage.removeItem('adminPw');
+      adminPwInput.value = '';
+      dashboardView.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      loginView.classList.remove('hidden');
+    }
+
+    loginBtn.addEventListener('click', () => verifyAndLogin(adminPwInput.value.trim()));
+    adminPwInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyAndLogin(adminPwInput.value.trim());
+    });
+    logoutBtn.addEventListener('click', logout);
+    refreshBtn.addEventListener('click', loadDashboard);
+    resetAllRoomsBtn.addEventListener('click', () => resetAll(false));
+    resetAllWithVisitorsBtn.addEventListener('click', () => resetAll(true));
+
+    if (adminPassword) {
+      verifyAndLogin(adminPassword);
+    }
+  </script>
+</body>
+</html>

@@ -305,6 +305,13 @@ socket.on('player:kicked', () => {
   window.location.href = '/';
 });
 
+socket.on('room:closed_by_admin', () => {
+  alert('관리자에 의해 방이 종료되었습니다.');
+  sessionStorage.removeItem('playerId');
+  sessionStorage.removeItem('playerRoomCode');
+  window.location.href = '/';
+});
+
 socket.on('game:countdown', async ({ mode, options, countdownEndsAt, serverNow }) => {
   stopAllTimers();
   hideAllStages();

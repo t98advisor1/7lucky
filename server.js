@@ -16,6 +16,7 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 3000;
 const MAX_PLAYERS = 100;
 const MAX_ROOMS = 50;
+const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || '7777');
 
 function getKstDateKey() {
   const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
@@ -58,6 +59,94 @@ app.get('/practice', (req, res) => {
 
 app.get('/manual', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'manual.html'));
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+function requireAdmin(req, res) {
+  const pw = String(req.headers['x-admin-password'] || '');
+  if (pw !== ADMIN_PASSWORD) {
+    res.status(401).json({ ok: false, error: '관리자 비밀번호가 올바르지 않습니다.' });
+    return false;
+  }
+  return true;
+}
+
+app.post('/api/admin/login', (req, res) => {
+  const pw = String(req.body?.password || '');
+  if (pw !== ADMIN_PASSWORD) {
+    return res.status(401).json({ ok: false, error: '비밀번호가 일치하지 않습니다.' });
+  }
+  res.json({ ok: true });
+});
+
+app.get('/api/admin/rooms', (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  const list = Array.from(rooms.values())
+    .map((room) => {
+      const playersArr = Array.from(room.players.values());
+      const connectedCount = playersArr.filter((p) => p.connected).length;
+      return {
+        code: room.code,
+        status: room.status,
+        mode: room.mode,
+        playerCount: playersArr.length,
+        connectedCount,
+        roundNumber: room.roundNumber,
+        historyCount: room.history.length,
+        createdAt: room.createdAt,
+        lastActivityAt: room.lastActivityAt,
+      };
+    })
+    .sort((a, b) => b.lastActivityAt - a.lastActivityAt);
+
+  const totalPlayers = list.reduce((acc, r) => acc + r.playerCount, 0);
+  res.json({
+    ok: true,
+    stats: {
+      onlineSockets: io.engine ? io.engine.clientsCount : 0,
+      todayVisitors: visitorStats.today,
+      totalVisitors: visitorStats.total,
+      activeRooms: rooms.size,
+      maxRooms: MAX_ROOMS,
+      maxPlayersPerRoom: MAX_PLAYERS,
+      totalPlayers,
+    },
+    rooms: list,
+  });
+});
+
+app.delete('/api/admin/rooms/:code', (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  const code = String(req.params.code || '').trim().toUpperCase();
+  const room = rooms.get(code);
+  if (!room) {
+    return res.status(404).json({ ok: false, error: '해당 방을 찾을 수 없습니다.' });
+  }
+  clearRoomTimers(room);
+  io.to(`room:${code}`).emit('room:closed_by_admin');
+  rooms.delete(code);
+  res.json({ ok: true, deleted: code });
+});
+
+app.post('/api/admin/reset-all', (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  const resetVisitors = Boolean(req.body?.resetVisitors);
+  const count = rooms.size;
+  for (const [code, room] of rooms.entries()) {
+    clearRoomTimers(room);
+    io.to(`room:${code}`).emit('room:closed_by_admin');
+  }
+  rooms.clear();
+
+  if (resetVisitors) {
+    visitorStats.today = 0;
+    visitorStats.total = 0;
+  }
+
+  res.json({ ok: true, clearedRooms: count, resetVisitors });
 });
 
 app.get('/api/visitors', (req, res) => {

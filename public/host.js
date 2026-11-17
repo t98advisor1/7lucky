@@ -412,6 +412,12 @@ socket.on('room:state', (state) => {
   renderRoomState(state);
 });
 
+socket.on('room:closed_by_admin', () => {
+  sessionStorage.removeItem('hostRoomCode');
+  alert('관리자에 의해 방이 초기화되었습니다.');
+  window.location.href = '/';
+});
+
 socket.on('game:countdown', async ({ mode, options, countdownSec, countdownEndsAt, serverNow }) => {
   stopStageTimers();
   const clockSkew = serverNow - Date.now();
