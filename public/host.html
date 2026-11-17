@@ -16,6 +16,8 @@
         <span id="roundBadge" class="badge">대기 중</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
+        <a href="/manual" class="btn btn-outline btn-sm">사용 설명서</a>
+        <a href="/practice" class="btn btn-outline btn-sm">혼자 연습하기</a>
         <button id="openHistoryBtn" class="btn btn-accent btn-sm">전체 누적 기록 (<span id="historyCount">0</span>)</button>
         <button id="newRoomBtn" class="btn btn-outline btn-sm">새 방 만들기</button>
       </div>
@@ -66,21 +68,30 @@
           </div>
 
           <!-- Lucky 7 Options -->
-          <div id="opts-lucky7" class="mt-3 flex items-center gap-3 flex-wrap">
-            <div style="flex: 1; min-width: 140px;">
-              <label class="text-muted" style="font-size: 0.82rem;">목표 시간 (초)</label>
-              <select id="lucky7Target" class="select mt-1">
-                <option value="5">5.000초</option>
-                <option value="7" selected>7.000초 (기본)</option>
-                <option value="10">10.000초</option>
-              </select>
+          <div id="opts-lucky7" class="mt-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between flex-wrap gap-2" style="padding: 10px 12px; border-radius: 10px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25);">
+              <span style="font-size: 0.88rem; font-weight: 700;">운영 버전 선택 (2가지 모드):</span>
+              <div class="flex gap-2 flex-wrap">
+                <button type="button" id="btnVerVisible" class="btn btn-outline btn-sm">버전 1: 숫자 보임 모드</button>
+                <button type="button" id="btnVerBlind" class="btn btn-primary btn-sm">버전 2: 3초 후 가림 모드</button>
+              </div>
             </div>
-            <div style="flex: 1; min-width: 180px;">
-              <label class="text-muted" style="font-size: 0.82rem;">블라인드 모드</label>
-              <select id="lucky7Blind" class="select mt-1">
-                <option value="true" selected>켜기 (3초 후 숫자 가림)</option>
-                <option value="false">끄기 (계속 숫자 보임)</option>
-              </select>
+            <div class="flex items-center gap-3 flex-wrap">
+              <div style="flex: 1; min-width: 140px;">
+                <label class="text-muted" style="font-size: 0.82rem;">목표 시간 (초)</label>
+                <select id="lucky7Target" class="select mt-1">
+                  <option value="5">5.000초</option>
+                  <option value="7" selected>7.000초 (기본)</option>
+                  <option value="10">10.000초</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <label class="text-muted" style="font-size: 0.82rem;">숫자 표시 방식</label>
+                <select id="lucky7Blind" class="select mt-1">
+                  <option value="false">버전 1: 숫자가 끝까지 보임 (시각 타이밍)</option>
+                  <option value="true" selected>버전 2: 3초 후 숫자가 가려짐 (블라인드 감각)</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -106,31 +117,80 @@
           </div>
 
           <!-- Ticketing Options -->
-          <div id="opts-ticketing" class="mt-3 flex items-center gap-3 flex-wrap hidden">
-            <div style="flex: 1; min-width: 160px;">
-              <label class="text-muted" style="font-size: 0.82rem;">기준 서버 시간 API</label>
-              <select id="ticketingServer" class="select mt-1">
-                <option value="interpark" selected>인터파크 티켓 서버</option>
-                <option value="melon">멜론 티켓 서버</option>
-                <option value="yes24">예스24 티켓 서버</option>
-                <option value="korail">코레일 예매 서버</option>
-                <option value="naver">네이버 표준 서버</option>
-                <option value="local">교실 자체 정밀 서버</option>
-              </select>
+          <div id="opts-ticketing" class="mt-3 flex flex-col gap-2 hidden">
+            <div class="flex items-center gap-3 flex-wrap">
+              <div style="flex: 2; min-width: 220px;">
+                <label class="text-muted" style="font-size: 0.82rem;">기준 예매처 서버 시간 선택</label>
+                <select id="ticketingServer" class="select mt-1">
+                  <optgroup label="공연 · 콘서트 · 팬클럽">
+                    <option value="interpark" selected>인터파크 티켓 (ticket.interpark.com)</option>
+                    <option value="nol-interpark">인터파크 NOL 티켓 (nol.interpark.com)</option>
+                    <option value="melon">멜론티켓 (ticket.melon.com)</option>
+                    <option value="ticketlink">티켓링크 (ticketlink.co.kr)</option>
+                    <option value="yes24">예스24 티켓 (ticket.yes24.com)</option>
+                    <option value="weverse">위버스 (weverse.io)</option>
+                    <option value="coupangplay">쿠팡플레이 (coupangplay.com)</option>
+                    <option value="fans">팬즈 FANS (app.fans)</option>
+                    <option value="berriz">베리즈 (berriz.in)</option>
+                    <option value="bstage">비스테이지 (bstage.in)</option>
+                    <option value="sejongpac">세종문화회관 (sejongpac.or.kr)</option>
+                  </optgroup>
+                  <optgroup label="교통 · 여행 · 캠핑">
+                    <option value="korail">코레일 KTX (letskorail.com)</option>
+                    <option value="srt">SRT 승차권 (etk.srail.kr)</option>
+                    <option value="knps">국립공원 예약시스템 (knps.or.kr)</option>
+                    <option value="campingkorea">캠핑코리아 (campingkorea.or.kr)</option>
+                    <option value="foresttrip">숲나들e 자연휴양림 (foresttrip.go.kr)</option>
+                    <option value="yanolja">NOL 야놀자 (nol.yanolja.com)</option>
+                    <option value="agoda">아고다 (agoda.com)</option>
+                    <option value="trip">트립닷컴 (kr.trip.com)</option>
+                  </optgroup>
+                  <optgroup label="영화 · 스포츠 · 레저">
+                    <option value="cgv">CGV (cgv.co.kr)</option>
+                    <option value="megabox">메가박스 (megabox.co.kr)</option>
+                    <option value="lottecinema">롯데시네마 (lottecinema.co.kr)</option>
+                    <option value="doosanbears">두산 베어스 (doosanbears.com)</option>
+                    <option value="ssglanders">SSG 랜더스 (ssglanders.com)</option>
+                    <option value="lgtwins">LG 트윈스 (lgtwins.com)</option>
+                    <option value="kbl">KBL 프로농구 (kbl.or.kr)</option>
+                    <option value="kovo">KOVO 프로배구 (kovo.co.kr)</option>
+                    <option value="runable">러너블 마라톤 (runable.me)</option>
+                    <option value="chuncheonmarathon">춘천마라톤 (chuncheonmarathon.com)</option>
+                  </optgroup>
+                  <optgroup label="수강신청 · 포털 · 쇼핑 · 맛집">
+                    <option value="sugang">전국 대학교 수강신청 표준시</option>
+                    <option value="naver">네이버 표준시 / 네이버예약 (naver.com)</option>
+                    <option value="kakao">카카오 / 카카오예약 (kakao.com)</option>
+                    <option value="catchtable">캐치테이블 (catchtable.co.kr)</option>
+                    <option value="musinsa">무신사 (musinsa.com)</option>
+                    <option value="oliveyoung">올리브영 (oliveyoung.co.kr)</option>
+                    <option value="29cm">29CM (29cm.co.kr)</option>
+                    <option value="nike">나이키 SNKRS (nike.com)</option>
+                    <option value="popmart">팝마트 (popmart.com)</option>
+                    <option value="witchform">윗치폼 (witchform.com)</option>
+                  </optgroup>
+                  <optgroup label="교실 기본 서버">
+                    <option value="local">교실 표준 서버 (자체 정밀시계)</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 130px;">
+                <label class="text-muted" style="font-size: 0.82rem;">좌석(포도알) 선택</label>
+                <select id="ticketingSeat" class="select mt-1">
+                  <option value="true" selected>포함 (포도알 잡기)</option>
+                  <option value="false">생략 (정각 클릭만)</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 130px;">
+                <label class="text-muted" style="font-size: 0.82rem;">오픈 카운트다운</label>
+                <select id="ticketingCountdown" class="select mt-1">
+                  <option value="5" selected>5초 전 오픈</option>
+                  <option value="10">10초 전 오픈</option>
+                </select>
+              </div>
             </div>
-            <div style="flex: 1; min-width: 130px;">
-              <label class="text-muted" style="font-size: 0.82rem;">좌석(포도알) 선택</label>
-              <select id="ticketingSeat" class="select mt-1">
-                <option value="true" selected>포함 (포도알 잡기)</option>
-                <option value="false">생략 (정각 클릭만)</option>
-              </select>
-            </div>
-            <div style="flex: 1; min-width: 130px;">
-              <label class="text-muted" style="font-size: 0.82rem;">오픈 카운트다운</label>
-              <select id="ticketingCountdown" class="select mt-1">
-                <option value="5" selected>5초 전 오픈</option>
-                <option value="10">10초 전 오픈</option>
-              </select>
+            <div class="text-muted" style="font-size: 0.8rem;">
+              서버시간 측정 참고 사이트: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (https://www.tickettime.co.kr/) ↗</a>
             </div>
           </div>
         </div>
@@ -194,6 +254,11 @@
         </div>
       </div>
     </div>
+
+    <footer class="text-center mt-3" style="padding: 16px 0 8px; border-top: 1px solid var(--border); font-size: 0.84rem; color: var(--text-muted);">
+      모든 참여자 닉네임과 기록은 데이터베이스에 저장되지 않으며, 서버 메모리(RAM)에서만 일시 동작 후 자동 삭제됩니다. ·
+      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 700; text-decoration: underline;">math-tong 공식 블로그 ↗</a>
+    </footer>
   </div>
 
   <!-- Accumulated History Modal -->

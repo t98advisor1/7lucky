@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사용 설명서 (PC · 모바일 매뉴얼) · 행운의 7초 &amp; 교실 복불복</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .manual-header {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(19, 27, 49, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .view-switcher {
+      display: inline-flex;
+      background: rgba(11, 16, 32, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .view-switch-btn {
+      padding: 10px 18px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .view-switch-btn.active {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* PC Menu Bar Layout */
+    .pc-manual-layout {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .pc-manual-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pc-menu-nav {
+      background: rgba(19, 27, 49, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .pc-menu-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pc-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+
+    .pc-menu-btn.active {
+      background: rgba(99, 102, 241, 0.22);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .screenshot-frame {
+      background: #070b16;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      margin: 16px 0;
+    }
+
+    .screenshot-bar {
+      background: #161f38;
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .screenshot-dots {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .screenshot-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Mobile Scroll Layout */
+    .mobile-scroll-card {
+      background: rgba(19, 27, 49, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .mobile-shot-wrap {
+      max-width: 340px;
+      margin: 16px auto;
+      border-radius: 22px;
+      border: 3px solid rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+      background: #070b16;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+    }
+
+    .mobile-shot-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .feature-item {
+      background: rgba(11, 16, 32, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .feature-item strong {
+      display: block;
+      color: #fcd34d;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+
+    .feature-item p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Pretty KakaoTalk Chat Container ("카카오톡 메시지 통") */
+    .kakao-room {
+      background: linear-gradient(180deg, #9bbbd4 0%, #8caecf 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      color: #1e293b;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .kakao-header {
+      background: rgba(155, 187, 212, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .kakao-header-title {
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kakao-badge {
+      background: #fee500;
+      color: #191919;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .kakao-body {
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 760px;
+      overflow-y: auto;
+    }
+
+    .kakao-date-pill {
+      align-self: center;
+      background: rgba(0, 0, 0, 0.18);
+      color: #ffffff;
+      font-size: 0.78rem;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    /* Right bubble (Teacher question) */
+    .kakao-msg-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .kakao-bubble-right {
+      background: #fee500;
+      color: #191919;
+      padding: 11px 15px;
+      border-radius: 16px 4px 16px 16px;
+      max-width: 78%;
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.5;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Left bubble (math-tong Answer) */
+    .kakao-msg-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .kakao-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: #1e293b;
+      color: #fee500;
+      font-weight: 900;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .kakao-left-content {
+      max-width: 82%;
+    }
+
+    .kakao-sender-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .kakao-bubble-left {
+      background: #ffffff;
+      color: #0f172a;
+      padding: 12px 16px;
+      border-radius: 4px 16px 16px 16px;
+      font-size: 0.91rem;
+      line-height: 1.6;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .kakao-bubble-left a {
+      color: #2563eb;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .kakao-time {
+      font-size: 0.72rem;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .kakao-footer {
+      background: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .kakao-share-box {
+      background: rgba(254, 229, 0, 0.12);
+      border: 1px solid rgba(254, 229, 0, 0.4);
+      border-radius: 14px;
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding-top: 24px; padding-bottom: 56px;">
+    <!-- Top Bar -->
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <a href="/" class="btn btn-outline btn-sm">홈으로</a>
+        <a href="/host" class="btn btn-primary btn-sm">방장 전광판 열기</a>
+        <a href="/practice" class="btn btn-outline btn-sm">혼자 연습하기</a>
+      </div>
+      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-accent btn-sm">
+        math-tong 공식 블로그 바로가기 ↗
+      </a>
+    </div>
+
+    <!-- Header & View Mode Switcher -->
+    <div class="manual-header">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <span class="badge badge-accent">실제 화면 스크린샷 수록 · PC &amp; 모바일 겸용</span>
+          <h1 style="margin: 10px 0 6px; font-size: 1.9rem;">행운의 7초 &amp; 교실 복불복 상세 사용 설명서</h1>
+          <p class="text-muted" style="margin: 0; font-size: 0.94rem; line-height: 1.55;">
+            PC에서는 왼쪽 <strong>메뉴바를 클릭</strong>해 각 기능의 실제 PC 스크린샷을 확인하고, 모바일에서는 <strong>아래로 스크롤</strong>하며 모바일 스크린샷으로 전체 과정을 확인하세요.
+          </p>
+        </div>
+
+        <div class="view-switcher">
+          <button type="button" id="btnSwitchPc" class="view-switch-btn active">PC 화면 기준 (메뉴 선택형)</button>
+          <button type="button" id="btnSwitchMo" class="view-switch-btn">모바일 화면 기준 (스크롤형)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 1. PC MANUAL VIEW (MENU BAR + PC SCREENSHOTS)                  -->
+    <!-- ============================================================== -->
+    <div id="pcManualView" class="pc-manual-layout">
+      <!-- Left Menu Bar -->
+      <nav class="pc-menu-nav" id="pcMenuNav">
+        <div style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); padding: 4px 10px;">
+          PC 기능별 메뉴 선택
+        </div>
+        <button type="button" class="pc-menu-btn active" data-pc-step="0">
+          <span>1. 메인 화면 &amp; 전체 흐름</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="1">
+          <span>2. 방 만들기 &amp; QR 모집</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="2">
+          <span>3. 행운의 7초 (2가지 버전)</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="3">
+          <span>4. 광클 복불복 (터치 대결)</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="4">
+          <span>5. 티켓팅 연습 (서버 선택)</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="5">
+          <span>6. 누적 기록 &amp; CSV 저장</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="6">
+          <span>7. 혼자 연습하기 (7초·티켓팅)</span>
+          <span>›</span>
+        </button>
+        <button type="button" class="pc-menu-btn" data-pc-step="7">
+          <span>8. 서버 무저장 &amp; 개인정보 안내</span>
+          <span>›</span>
+        </button>
+      </nav>
+
+      <!-- Right Detail Panel -->
+      <div class="card" id="pcDetailPanel" style="padding: 24px;"></div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 2. MOBILE MANUAL VIEW (VERTICAL SCROLL + MOBILE SCREENSHOTS)   -->
+    <!-- ============================================================== -->
+    <div id="mobileManualView" class="hidden">
+      <div class="mobile-scroll-card">
+        <span class="badge badge-success">STEP 1 · QR 스캔 및 입장</span>
+        <h2 style="margin: 10px 0 6px;">1. QR 코드로 접속 후 닉네임 입력하기</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          선생님(방장) 화면에 띄워진 QR 코드를 스마트폰 기본 카메라로 비추면 방 코드가 자동으로 입력된 참여 페이지가 열립니다. 학번이나 닉네임을 적고 <strong>[입장하기]</strong>를 누르면 즉시 대기실로 들어갑니다.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-1-join.png" alt="모바일 QR 접속 및 닉네임 입력 화면" />
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <strong>앱 설치 및 회원가입 불필요</strong>
+            <p>별도 앱 설치나 로그인 없이 카메라 QR 스캔 한 번으로 즉시 참여합니다.</p>
+          </div>
+          <div class="feature-item">
+            <strong>새로고침해도 자동 재접속</strong>
+            <p>실수로 화면을 새로고침하더라도 같은 방과 닉네임으로 자동 복구됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge badge-success">STEP 2 · 대기실 및 내 누적 기록</span>
+        <h2 style="margin: 10px 0 6px;">2. 방장 시작 대기 &amp; 내 누적 성적 확인</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          입장 후 방장이 시작 버튼을 누를 때까지 대기합니다. 여러 번 게임을 진행하더라도 화면 아래쪽 <strong>[내 누적 기록]</strong>에서 내가 참여했던 모든 라운드의 순위와 기록을 한눈에 볼 수 있습니다.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-2-waiting.png" alt="모바일 대기 화면 및 내 누적 기록" />
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge badge-accent">STEP 3-A · 행운의 7초 (버전 1: 숫자 보임 모드)</span>
+        <h2 style="margin: 10px 0 6px;">3-1. 행운의 7초 — 숫자가 끝까지 보이는 버전</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          방장이 <strong>[버전 1: 숫자 보임 모드]</strong>로 시작하면 초시계 숫자가 끝까지 화면에 표시됩니다. 목표 시간(기본 7.000초)에 정확히 맞춰 빨간색 <strong>[지금 멈추기]</strong> 버튼을 터치하세요.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-3-lucky7-visible.png" alt="모바일 행운의 7초 숫자 보임 모드" />
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge badge-accent">STEP 3-B · 행운의 7초 (버전 2: 3초 후 가림 모드)</span>
+        <h2 style="margin: 10px 0 6px;">3-2. 행운의 7초 — 3초 후 숫자가 가려지는 블라인드 버전</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          방장이 <strong>[버전 2: 3초 후 가림 모드]</strong>로 시작하면 처음 3.000초까지만 숫자가 보이고 이후에는 숫자가 흐리게 블라인드 처리됩니다. 마음속으로 남은 4초를 세어 정확히 7.000초에 멈추세요!
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-4-lucky7-blind.png" alt="모바일 행운의 7초 3초 후 가림 모드" />
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge badge-danger">STEP 4 · 광클 복불복</span>
+        <h2 style="margin: 10px 0 6px;">4. 화면을 빠르게 터치하는 광클 복불복</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          제한 시간(5초/10초/15초) 동안 화면 중앙의 대형 패드를 빠르게 연타해 클릭 수를 늘립니다. 방장이 설정한 복불복 규칙에 따라 <strong>1등, 꼴찌, 중간 순위(눈치게임), 랜덤 순위</strong>가 당첨됩니다.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-5-clicker.png" alt="모바일 광클 복불복 연타 화면" />
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge" style="background: rgba(168,85,247,0.25); color: #e9d5ff;">STEP 5 · 실전 티켓팅 &amp; 포도알 잡기</span>
+        <h2 style="margin: 10px 0 6px;">5. 서버 시간 정각 클릭 &amp; 포도알 좌석 선택</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          카운트다운이 끝나기 전에 미리 누르면 부정클릭 페널티(+0.5초)가 적용됩니다. 정각 오픈과 동시에 <strong>[지금 예매하기]</strong>를 누르고, 남아 있는 보라색 좌석(포도알) 중 1개를 가장 빠르게 터치하세요.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-6-ticketing-seat.png" alt="모바일 티켓팅 포도알 좌석 선택 화면" />
+        </div>
+      </div>
+
+      <div class="mobile-scroll-card">
+        <span class="badge">STEP 6 · 혼자 연습하기</span>
+        <h2 style="margin: 10px 0 6px;">6. 휴대폰으로 혼자서 7초 &amp; 서버별 티켓팅 연습하기</h2>
+        <p class="text-muted" style="font-size: 0.93rem; line-height: 1.6;">
+          방장이 방을 열지 않아도 <strong>[혼자 연습하기]</strong>(`/practice`) 메뉴에서 행운의 7초(숫자 보임 / 3초 후 가림)와 주요 예매처 서버 시간 동기화 티켓팅을 언제든 연습할 수 있습니다.
+        </p>
+        <div class="mobile-shot-wrap">
+          <img src="/screenshots/mo-7-practice.png" alt="모바일 혼자 연습하기 화면" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 3. KAKAOTALK CHAT Q&A ("카카오톡 메시지 통") & SHARE BOX        -->
+    <!-- ============================================================== -->
+    <div class="mt-3" style="margin-top: 32px;">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+        <div>
+          <span class="badge badge-accent">자주 묻는 질문 &amp; 유의사항 Q&amp;A</span>
+          <h2 style="margin: 8px 0 4px;">선생님들이 가장 궁금해하시는 Q&amp;A (톡 안내)</h2>
+        </div>
+        <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-primary btn-sm">
+          제작자 블로그 (math-tong) 방문하기 ↗
+        </a>
+      </div>
+
+      <div class="kakao-room">
+        <div class="kakao-header">
+          <div class="kakao-header-title">
+            <span>행운의 7초 · 교실 복불복 Q&amp;A 안내방</span>
+            <span class="kakao-badge">실시간 가이드</span>
+          </div>
+          <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="font-size: 0.82rem; font-weight: 800; color: #1e293b; text-decoration: underline;">
+            blog.naver.com/math-tong ↗
+          </a>
+        </div>
+
+        <div class="kakao-body">
+          <div class="kakao-date-pill">진행 방법 및 유의사항 Q&amp;A</div>
+
+          <!-- Q1 -->
+          <div class="kakao-msg-right">
+            <span class="kakao-time">오전 10:31</span>
+            <div class="kakao-bubble-right">
+              한 게임에 몇 명까지 참여 가능한가요? 여러 선생님이 동시에 이 앱에 접속해서 각자 다른 QR 코드로 사용해도 상관없나요?
+            </div>
+          </div>
+          <div class="kakao-msg-left">
+            <div class="kakao-avatar">통</div>
+            <div class="kakao-left-content">
+              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-bubble-left">
+                네! <strong>방 1개(한 게임)당 최대 100명</strong>까지 동시에 참여할 수 있습니다.<br />
+                또한 여러 선생님이 동시에 사이트에 접속하셔도 방을 만들 때마다 <strong>서로 다른 6자리 방 코드와 개별 QR 코드</strong>가 생성되므로, 각 반에서 동시에 진행하셔도 기록이 절대 섞이지 않습니다.
+              </div>
+            </div>
+            <span class="kakao-time">오전 10:31</span>
+          </div>
+
+          <!-- Q2 -->
+          <div class="kakao-msg-right">
+            <span class="kakao-time">오전 10:33</span>
+            <div class="kakao-bubble-right">
+              행운의 7초는 숫자가 끝까지 보이는 버전과 3초 후에 가려지는 버전 두 가지로 운영할 수 있나요? 혼자 연습도 되나요?
+            </div>
+          </div>
+          <div class="kakao-msg-left">
+            <div class="kakao-avatar">통</div>
+            <div class="kakao-left-content">
+              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-bubble-left">
+                물론입니다! 방장 화면과 개인 연습장 모두에서:<br />
+                1) <strong>[버전 1: 숫자 보임 모드]</strong> — 초시계 숫자가 끝까지 보이는 시각 반응 대결<br />
+                2) <strong>[버전 2: 3초 후 가림 모드]</strong> — 3.000초 뒤 숫자가 가려져 마음속으로 세는 블라인드 대결<br />
+                두 가지를 버튼 하나로 즉시 전환할 수 있고, <strong>[혼자 연습하기]</strong> 메뉴에서 학생·선생님 누구나 혼자 연습할 수 있습니다.
+              </div>
+            </div>
+            <span class="kakao-time">오전 10:33</span>
+          </div>
+
+          <!-- Q3 -->
+          <div class="kakao-msg-right">
+            <span class="kakao-time">오전 10:35</span>
+            <div class="kakao-bubble-right">
+              티켓팅 연습에서는 어떤 서버들을 고를 수 있나요? 참고한 사이트도 있나요?
+            </div>
+          </div>
+          <div class="kakao-msg-left">
+            <div class="kakao-avatar">통</div>
+            <div class="kakao-left-content">
+              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-bubble-left">
+                <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer">티켓타임(tickettime.co.kr)</a>의 서버시간 분류를 참고하여 <strong>공연·콘서트(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스, 쿠팡플레이 등)</strong>, <strong>교통·캠핑(코레일 KTX, SRT, 국립공원, 숲나들e 등)</strong>, <strong>영화·스포츠(CGV, 프로야구 등)</strong>, <strong>전국 대학 수강신청 및 직접 도메인 입력</strong>까지 총 40여 개 서버를 선택해 연습하실 수 있습니다.
+              </div>
+            </div>
+            <span class="kakao-time">오전 10:35</span>
+          </div>
+
+          <!-- Q4 -->
+          <div class="kakao-msg-right">
+            <span class="kakao-time">오전 10:37</span>
+            <div class="kakao-bubble-right">
+              학생들이 적는 닉네임이나 기록이 서버에 얼마나 저장되나요? 개인정보가 남지 않나요?
+            </div>
+          </div>
+          <div class="kakao-msg-left">
+            <div class="kakao-avatar">통</div>
+            <div class="kakao-left-content">
+              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-bubble-left">
+                <strong>서버 디스크나 데이터베이스(DB)에는 단 1바이트도 영구 저장되지 않습니다!</strong><br />
+                • 진행 중인 방의 닉네임과 점수만 서버의 <strong>임시 메모리(RAM)</strong>에 잠깐 올라가며,<br />
+                • 방장이 <strong>[기록 초기화]</strong>나 <strong>[새 방 만들기]</strong>를 누르면 즉시 메모리에서 완전히 삭제됩니다.<br />
+                • 창을 그냥 닫더라도 마지막 활동 후 <strong>3시간이 지나면 메모리에서 자동 소멸</strong>되므로 서버에는 아무것도 남지 않습니다. 필요한 기록은 수업 직후 <strong>[CSV 다운로드]</strong>로 선생님 PC에 내려받으세요!
+              </div>
+            </div>
+            <span class="kakao-time">오전 10:37</span>
+          </div>
+
+          <!-- Q5 -->
+          <div class="kakao-msg-right">
+            <span class="kakao-time">오전 10:39</span>
+            <div class="kakao-bubble-right">
+              수업 시간에 진행할 때 꼭 알아두어야 할 유의사항이 있을까요?
+            </div>
+          </div>
+          <div class="kakao-msg-left">
+            <div class="kakao-avatar">통</div>
+            <div class="kakao-left-content">
+              <div class="kakao-sender-name">매쓰통 (math-tong) 안내봇</div>
+              <div class="kakao-bubble-left">
+                <strong>수업 전 핵심 유의사항 3가지:</strong><br />
+                1) 무료 클라우드(Render) 특성상 15분간 아무도 접속하지 않으면 절전 모드로 들어갑니다. <strong>수업 시작 1분 전에 선생님 PC에서 사이트를 한 번 열어두시면</strong> 서버가 깨어나 학생들이 즉시 입장합니다.<br />
+                2) 교실 공유기(Wi-Fi) 1대에 50~100명이 동시에 몰리면 공유기 자체가 느려질 수 있으니, 온라인 주소로 접속할 때는 학생 <strong>모바일 데이터(LTE/5G)</strong>를 함께 쓰면 더욱 쾌적합니다.<br />
+                3) 더 많은 교실용 웹앱과 수업 자료는 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer">math-tong 공식 블로그 ↗</a>에서 언제든 확인하실 수 있습니다!
+              </div>
+            </div>
+            <span class="kakao-time">오전 10:39</span>
+          </div>
+        </div>
+
+        <div class="kakao-footer">
+          <div style="font-size: 0.85rem; color: #334155; font-weight: 700;">
+            궁금한 점이나 추가 아이디어는 매쓰통 블로그에 남겨주세요.
+          </div>
+          <div class="flex gap-2">
+            <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" class="btn btn-sm" style="background: #fee500; color: #191919; font-weight: 800;">
+              math-tong 블로그 바로가기 ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- KakaoTalk Share Message Copy Box -->
+      <div class="card mt-3 kakao-share-box">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <div>
+            <strong style="color: #fcd34d; font-size: 1rem;">카카오톡 단톡방 공유용 안내 메시지 (1클릭 복사)</strong>
+            <div class="text-muted" style="font-size: 0.84rem;">학급 단톡방이나 동료 선생님께 공유할 때 아래 버튼을 눌러 그대로 붙여넣으세요.</div>
+          </div>
+          <button type="button" id="copyKakaoMsgBtn" class="btn btn-accent btn-sm">카톡 안내 문구 복사하기</button>
+        </div>
+        <pre id="kakaoShareText" style="margin: 0; padding: 12px; border-radius: 10px; background: rgba(11, 16, 32, 0.85); color: #f8fafc; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; font-family: inherit;">[행운의 7초 &amp; 교실 복불복 · 티켓팅 연습 안내]
+• 참여 방법: 화면의 QR 코드 스캔 또는 방 코드 6자리 입력 후 닉네임 입장 (방당 최대 100명)
+• 게임 종목:
+  1) 행운의 7초 (버전 1: 숫자 보임 / 버전 2: 3초 후 블라인드)
+  2) 광클 복불복 (1등 / 꼴찌 / 중간순위 / 랜덤순위 당첨)
+  3) 실전 티켓팅 &amp; 포도알 연습 (예매처 서버시간 동기화)
+• 개인정보 안내: 서버 DB 무저장 (메모리 일시 처리 후 자동 완전 삭제)
+• 제작 및 안내 블로그: https://blog.naver.com/math-tong</pre>
+      </div>
+    </div>
+
+    <footer class="text-center mt-3" style="padding: 20px 0 0; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
+      Copyright © 2026 <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 800; text-decoration: underline;">math-tong 공식 블로그 ↗</a> ·
+      티켓팅 서버시간 참고: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (tickettime.co.kr) ↗</a>
+    </footer>
+  </div>
+
+  <script>
+    const PC_STEPS = [
+      {
+        badge: 'MENU 1 · 시작 화면',
+        title: '1. 메인 화면 구성 및 전체 진행 흐름',
+        desc: '접속 첫 화면에서 선생님(방장)은 [방 만들고 QR 띄우기]로 전광판을 열고, 학생은 QR 스캔 또는 [코드로 바로 참여]로 입장합니다. 방을 열지 않고 혼자 연습할 때는 [혼자 연습장 가기]를 선택합니다.',
+        img: '/screenshots/pc-1-home.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/',
+        features: [
+          ['선생님 / 진행자용 (방장 화면)', '새로운 6자리 방 코드와 QR 코드를 즉시 생성하고 대형 화면(프로젝터·전자칠판)에 전광판을 띄웁니다.'],
+          ['학생 / 참가자용 (코드 참여)', 'QR 스캔이 어려운 환경이거나 태블릿·PC로 참여하는 학생은 6자리 코드만 입력해 바로 입장합니다.'],
+          ['7초 & 티켓팅 혼자 연습', '수업 전후로 학생이나 선생님이 개별 기기에서 행운의 7초(2가지 버전)와 서버별 티켓팅을 혼자 연습합니다.']
+        ]
+      },
+      {
+        badge: 'MENU 2 · 방 만들기 & QR 모집',
+        title: '2. 방장 전광판 열기 & QR 코드로 학생 모집 (최대 100명)',
+        desc: '방장 화면에 접속하면 고유한 6자리 방 코드와 QR 코드가 자동으로 만들어집니다. 학생들이 휴대폰으로 QR을 찍고 닉네임을 입력하면 왼쪽 아래 [참여 학생] 목록에 실시간으로 초록색 접속 표시와 함께 등록됩니다.',
+        img: '/screenshots/pc-2-host-qr.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/host',
+        features: [
+          ['방당 최대 100명 동시 참여', '한 게임방에 최대 100명까지 입장 가능하며, 현재 접속 인원이 실시간 배지로 표시됩니다.'],
+          ['여러 선생님 동시 사용 가능', '방장마다 서로 다른 6자리 코드와 QR이 발급되므로 여러 반에서 동시에 사용해도 방이 완전히 분리됩니다.'],
+          ['접속 주소 수정 및 링크 복사', '온라인 배포 주소 또는 로컬 와이파이 IP가 자동 감지되며, [참여 링크 복사]로 메신저에 바로 공유할 수 있습니다.']
+        ]
+      },
+      {
+        badge: 'MENU 3 · 행운의 7초 (2가지 버전)',
+        title: '3. 행운의 7초 — [숫자 보임 버전] & [3초 후 가림 버전]',
+        desc: '방장이 상단에서 [버전 1: 숫자 보임 모드]와 [버전 2: 3초 후 가림 모드] 중 원하는 방식을 선택해 시작합니다. 학생들이 자신의 휴대폰에서 멈추기를 누르는 즉시 전광판에 0.001초 단위의 기록과 목표 시간 대비 오차(±초) 순위가 실시간으로 표시됩니다.',
+        img: '/screenshots/pc-3-lucky7.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/host (행운의 7초 진행 화면)',
+        features: [
+          ['버전 1: 숫자 보임 모드', '초시계 숫자가 0초부터 멈출 때까지 계속 보입니다. 순발력과 시각 반응 타이밍을 겨룰 때 적합합니다.'],
+          ['버전 2: 3초 후 가림 모드 (블라인드)', '시작 후 3.000초가 지나면 학생 화면의 숫자가 흐리게 가려집니다. 마음속으로 4초를 세어 멈추는 고도의 심리 게임입니다.'],
+          ['목표 시간 변경 지원', '기본 7.000초 외에도 5.000초, 10.000초로 목표 시간을 바꾸어 여러 라운드를 진행할 수 있습니다.']
+        ]
+      },
+      {
+        badge: 'MENU 4 · 광클 복불복',
+        title: '4. 광클 복불복 — 실시간 레이싱 그래프 & 4가지 복불복 당첨 규칙',
+        desc: '제한 시간(5초/10초/15초) 동안 학생들이 휴대폰 화면을 빠르게 터치하면, 방장 전광판에 실시간 막대그래프 레이스가 펼쳐집니다. 무조건 1등만 뽑는 것이 아니라 복불복 당첨 기준을 다양하게 설정할 수 있습니다.',
+        img: '/screenshots/pc-4-clicker.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/host (광클 복불복 실시간 레이스)',
+        features: [
+          ['최다 클릭 1등 / 최소 클릭 꼴찌 당첨', '가장 많이 누른 1등뿐만 아니라 가장 적게 누른 꼴찌를 당첨자로 뽑는 반전 복불복이 가능합니다.'],
+          ['중간 순위(눈치게임) / 랜덤 순위 당첨', '정확히 중간 등수를 맞히는 눈치게임이나, 모든 순위 중 무작위 등수를 추첨하는 완전 복불복 모드를 지원합니다.'],
+          ['100명 동시 연타 최적화', '서버에서 실시간 트래픽을 250ms 주기로 묶어 처리하므로 다수의 학생이 동시에 연타해도 끊김 없이 부드럽게 작동합니다.']
+        ]
+      },
+      {
+        badge: 'MENU 5 · 티켓팅 연습',
+        title: '5. 실전 티켓팅 연습 — 예매처별 서버시간 연동 & 포도알 좌석 잡기',
+        desc: '티켓타임(tickettime.co.kr)의 주요 예매처 서버 목록(인터파크, NOL티켓, 멜론, 티켓링크, 예스24, 위버스, 코레일 KTX, SRT, 전국 대학 수강신청 등)을 선택해 카운트다운 후 정각 클릭과 보라색 좌석(포도알) 선택 속도를 겨룹니다.',
+        img: '/screenshots/pc-5-ticketing.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/host (티켓팅 연습 전광판)',
+        features: [
+          ['40여 개 주요 예매·수강신청 서버 선택', '공연·콘서트, 교통·캠핑, 영화·스포츠, 대학교 수강신청 및 포털 표준시까지 카테고리별로 선택할 수 있습니다.'],
+          ['오픈 전 부정클릭 페널티 구현', '카운트다운이 0이 되기 전에 미리 연타하면 부정클릭 경고와 함께 0.5초 페널티가 적용되어 실제 예매 긴장감을 살렸습니다.'],
+          ['반응속도 + 좌석 선택 완료시간 측정', '정각 오픈 후 예매 버튼을 누른 반응속도(초)와 포도알 좌석까지 최종 선택한 완료시간(초)을 모두 기록합니다.']
+        ]
+      },
+      {
+        badge: 'MENU 6 · 누적 기록 & CSV 저장',
+        title: '6. 전체 누적 기록 한눈에 보기 & 엑셀(CSV) 다운로드',
+        desc: '여러 번 게임을 진행하더라도 우측 상단 [전체 누적 기록] 버튼을 누르면 지금까지 진행한 모든 라운드의 결과를 한 번에 모아서 볼 수 있습니다.',
+        img: '/screenshots/pc-6-history.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/host (전체 누적 기록 모달)',
+        features: [
+          ['학생별 누적 요약표', '학생마다 총 몇 라운드에 참여했는지, 행운의 7초 최고 기록과 평균 오차, 광클 누적 클릭 합계, 티켓팅 최고 기록을 자동 합산합니다.'],
+          ['라운드별 상세 기록 탭', '1라운드부터 마지막 라운드까지 각 게임의 전체 순위표를 스크롤하며 다시 확인할 수 있습니다.'],
+          ['CSV 파일 다운로드 (한글 깨짐 방지)', 'UTF-8 BOM이 적용된 CSV 파일로 내려받아 엑셀에서 바로 열고 학급 시상이나 기록 보관에 활용할 수 있습니다.']
+        ]
+      },
+      {
+        badge: 'MENU 7 · 혼자 연습하기',
+        title: '7. 개인 연습장 — 행운의 7초(2버전) & 티켓팅 서버시간 혼자 연습',
+        desc: '방장이 게임을 열지 않아도 학생이나 선생님이 PC·스마트폰에서 언제든 혼자 연습할 수 있는 전용 공간(/practice)입니다.',
+        img: '/screenshots/pc-7-practice.png',
+        urlBar: 'https://lucky7-classroom-app.onrender.com/practice',
+        features: [
+          ['행운의 7초 혼자 연습 (버전 1 / 버전 2)', '숫자가 끝까지 보이는 버전과 3초 후 블라인드되는 버전을 직접 고르고 내 최고 기록을 경신할 수 있습니다.'],
+          ['예매처 서버시간 동기화 & 직접 도메인 입력', '원하는 예매처 서버를 고르거나 대학교 수강신청 주소를 직접 입력해 내 기기와의 시계 오차(ms) 및 왕복 지연(RTT)을 측정합니다.'],
+          ['참고 사이트 안내', '서버시간 개념 및 측정 방식은 티켓타임(https://www.tickettime.co.kr/)을 참고하여 교실 학습용으로 구현되었습니다.']
+        ]
+      },
+      {
+        badge: 'MENU 8 · 서버 저장 & 개인정보 안내',
+        title: '8. 서버 데이터 보관 구조 및 개인정보 무저장 안내',
+        desc: '학교 현장에서 안심하고 사용하실 수 있도록, 본 앱은 외부 데이터베이스(DB)를 전혀 사용하지 않으며 서버에 어떠한 개인정보나 기록 파일도 남기지 않습니다.',
+        img: '/screenshots/pc-2-host-qr.png',
+        urlBar: '서버 메모리(RAM) 일시 처리 구조 안내',
+        customHtml: `
+          <div class="table-wrap mt-2">
+            <table>
+              <thead>
+                <tr>
+                  <th>항목</th>
+                  <th>처리 및 보관 방식</th>
+                  <th>삭제 시점</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>참가자 닉네임 및 방 코드</strong></td>
+                  <td>서버 메모리(RAM) 내 <code>Map</code> 객체에만 일시 보관 (디스크/DB 기록 없음)</td>
+                  <td>방장이 <strong>[새 방 만들기]</strong> 클릭 시 즉시 삭제 / 미사용 시 <strong>3시간 후 자동 소멸</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>라운드별 게임 기록</strong></td>
+                  <td>해당 방의 메모리 배열에만 일시 유지 (외부 전송 없음)</td>
+                  <td>방장이 <strong>[기록 초기화]</strong> 클릭 시 즉시 삭제 / 서버 재시작·절전 시 즉시 초기화</td>
+                </tr>
+                <tr>
+                  <td><strong>개인 연습 기록 (/practice)</strong></td>
+                  <td>서버로 전송되지 않고 사용자 브라우저 화면 변수에서만 표시</td>
+                  <td>페이지 새로고침 또는 탭 닫기 즉시 소멸</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `,
+        features: [
+          ['영구 저장소(DB) 제로(0)', 'MySQL, Firebase 등 외부 DB를 일절 연결하지 않아 서버에 학생 이름이나 활동 로그가 남지 않습니다.'],
+          ['즉시 초기화 버튼 제공', '수업이 끝난 뒤 방장 화면에서 [기록 초기화] 또는 [새 방 만들기]를 누르면 그 즉시 메모리에서도 완전히 지워집니다.'],
+          ['보관이 필요할 땐 CSV 다운로드', '서버에는 남지 않으므로, 기록 보관이 필요한 경우에만 선생님이 직접 [CSV 다운로드] 버튼을 눌러 PC에 저장하시면 됩니다.']
+        ]
+      }
+    ];
+
+    const pcDetailPanel = document.getElementById('pcDetailPanel');
+    const pcMenuBtns = document.querySelectorAll('.pc-menu-btn');
+
+    function renderPcStep(idx) {
+      const step = PC_STEPS[idx];
+      pcMenuBtns.forEach((btn, i) => btn.classList.toggle('active', i === idx));
+
+      const featuresHtml = step.features
+        .map(
+          ([title, text]) => `
+          <div class="feature-item">
+            <strong>${title}</strong>
+            <p>${text}</p>
+          </div>
+        `
+        )
+        .join('');
+
+      pcDetailPanel.innerHTML = `
+        <span class="badge badge-accent">${step.badge}</span>
+        <h2 style="margin: 10px 0 8px;">${step.title}</h2>
+        <p class="text-muted" style="font-size: 0.94rem; line-height: 1.6; margin-bottom: 14px;">
+          ${step.desc}
+        </p>
+
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="screenshot-dots">
+              <span style="background: #ef4444;"></span>
+              <span style="background: #f59e0b;"></span>
+              <span style="background: #10b981;"></span>
+            </div>
+            <span style="font-family: monospace;">${step.urlBar}</span>
+            <span>PC 실제 화면 캡처</span>
+          </div>
+          <img src="${step.img}" alt="${step.title}" />
+        </div>
+
+        ${step.customHtml || ''}
+
+        <div class="feature-list">
+          ${featuresHtml}
+        </div>
+      `;
+    }
+
+    pcMenuBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        renderPcStep(Number(btn.dataset.pcStep));
+      });
+    });
+
+    renderPcStep(0);
+
+    // --- PC vs Mobile View Switcher ---
+    const btnSwitchPc = document.getElementById('btnSwitchPc');
+    const btnSwitchMo = document.getElementById('btnSwitchMo');
+    const pcManualView = document.getElementById('pcManualView');
+    const mobileManualView = document.getElementById('mobileManualView');
+
+    function setManualView(mode) {
+      const isMo = mode === 'mobile';
+      btnSwitchPc.classList.toggle('active', !isMo);
+      btnSwitchMo.classList.toggle('active', isMo);
+      pcManualView.classList.toggle('hidden', isMo);
+      mobileManualView.classList.toggle('hidden', !isMo);
+    }
+
+    btnSwitchPc.addEventListener('click', () => setManualView('pc'));
+    btnSwitchMo.addEventListener('click', () => setManualView('mobile'));
+
+    // Auto-select Mobile Scroll view if opened on a narrow mobile screen
+    if (window.innerWidth <= 768) {
+      setManualView('mobile');
+    }
+
+    // --- Kakao Share Copy ---
+    const copyKakaoMsgBtn = document.getElementById('copyKakaoMsgBtn');
+    const kakaoShareText = document.getElementById('kakaoShareText');
+    copyKakaoMsgBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(kakaoShareText.innerText);
+        copyKakaoMsgBtn.textContent = '복사 완료! 단톡방에 붙여넣으세요';
+        setTimeout(() => {
+          copyKakaoMsgBtn.textContent = '카톡 안내 문구 복사하기';
+        }, 2000);
+      } catch (e) {
+        alert('아래 텍스트를 길게 눌러 복사해주세요.');
+      }
+    });
+  </script>
+</body>
+</html>

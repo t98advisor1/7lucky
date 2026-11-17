@@ -44,6 +44,10 @@ app.get('/practice', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'practice.html'));
 });
 
+app.get('/manual', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'manual.html'));
+});
+
 // --- Network & QR Helpers ---
 function getLocalIPv4s() {
   const interfaces = os.networkInterfaces();
@@ -99,23 +103,85 @@ app.get('/api/qr', async (req, res) => {
 
 // --- External Server Time Calibration (TicketTime-style) ---
 const TIME_TARGETS = {
-  local: { name: '교실 표준 서버 (자체 정밀시계)', url: null },
-  interpark: { name: '인터파크 티켓 서버', url: 'https://tickets.interpark.com' },
-  melon: { name: '멜론 티켓 서버', url: 'https://ticket.melon.com' },
-  yes24: { name: '예스24 티켓 서버', url: 'http://ticket.yes24.com' },
-  korail: { name: '코레일 예매 서버', url: 'https://www.letskorail.com' },
-  naver: { name: '네이버 표준 서버', url: 'https://www.naver.com' },
+  // 공연 · 콘서트 · 팬클럽
+  interpark: { category: '공연 · 콘서트', name: '인터파크 티켓 (ticket.interpark.com)', url: 'https://tickets.interpark.com' },
+  'nol-interpark': { category: '공연 · 콘서트', name: '인터파크 NOL 티켓 (nol.interpark.com)', url: 'https://nol.interpark.com' },
+  melon: { category: '공연 · 콘서트', name: '멜론티켓 (ticket.melon.com)', url: 'https://ticket.melon.com' },
+  ticketlink: { category: '공연 · 콘서트', name: '티켓링크 (ticketlink.co.kr)', url: 'https://www.ticketlink.co.kr' },
+  yes24: { category: '공연 · 콘서트', name: '예스24 티켓 (ticket.yes24.com)', url: 'http://ticket.yes24.com' },
+  weverse: { category: '공연 · 콘서트', name: '위버스 (weverse.io)', url: 'https://weverse.io' },
+  coupangplay: { category: '공연 · 콘서트', name: '쿠팡플레이 (coupangplay.com)', url: 'https://www.coupangplay.com' },
+  fans: { category: '공연 · 콘서트', name: '팬즈 FANS (app.fans)', url: 'https://app.fans' },
+  berriz: { category: '공연 · 콘서트', name: '베리즈 (berriz.in)', url: 'https://berriz.in' },
+  bstage: { category: '공연 · 콘서트', name: '비스테이지 (bstage.in)', url: 'https://bstage.in' },
+  sejongpac: { category: '공연 · 콘서트', name: '세종문화회관 (sejongpac.or.kr)', url: 'https://www.sejongpac.or.kr' },
+
+  // 교통 · 여행 · 캠핑
+  korail: { category: '교통 · 여행 · 캠핑', name: '코레일 KTX (letskorail.com)', url: 'https://www.letskorail.com' },
+  srt: { category: '교통 · 여행 · 캠핑', name: 'SRT 승차권 (etk.srail.kr)', url: 'https://etk.srail.kr' },
+  knps: { category: '교통 · 여행 · 캠핑', name: '국립공원 예약시스템 (knps.or.kr)', url: 'https://reservation.knps.or.kr' },
+  campingkorea: { category: '교통 · 여행 · 캠핑', name: '캠핑코리아 (campingkorea.or.kr)', url: 'https://www.campingkorea.or.kr' },
+  foresttrip: { category: '교통 · 여행 · 캠핑', name: '숲나들e 자연휴양림 (foresttrip.go.kr)', url: 'https://www.foresttrip.go.kr' },
+  yanolja: { category: '교통 · 여행 · 캠핑', name: 'NOL 야놀자 (nol.yanolja.com)', url: 'https://nol.yanolja.com' },
+  agoda: { category: '교통 · 여행 · 캠핑', name: '아고다 (agoda.com)', url: 'https://www.agoda.com' },
+  trip: { category: '교통 · 여행 · 캠핑', name: '트립닷컴 (kr.trip.com)', url: 'https://kr.trip.com' },
+
+  // 영화 · 스포츠 · 레저
+  cgv: { category: '영화 · 스포츠 · 레저', name: 'CGV (cgv.co.kr)', url: 'https://www.cgv.co.kr' },
+  megabox: { category: '영화 · 스포츠 · 레저', name: '메가박스 (megabox.co.kr)', url: 'https://www.megabox.co.kr' },
+  lottecinema: { category: '영화 · 스포츠 · 레저', name: '롯데시네마 (lottecinema.co.kr)', url: 'https://www.lottecinema.co.kr' },
+  doosanbears: { category: '영화 · 스포츠 · 레저', name: '두산 베어스 (doosanbears.com)', url: 'https://www.doosanbears.com' },
+  ssglanders: { category: '영화 · 스포츠 · 레저', name: 'SSG 랜더스 (ssglanders.com)', url: 'https://www.ssglanders.com' },
+  lgtwins: { category: '영화 · 스포츠 · 레저', name: 'LG 트윈스 (lgtwins.com)', url: 'https://www.lgtwins.com' },
+  kbl: { category: '영화 · 스포츠 · 레저', name: 'KBL 프로농구 (kbl.or.kr)', url: 'https://www.kbl.or.kr' },
+  kovo: { category: '영화 · 스포츠 · 레저', name: 'KOVO 프로배구 (kovo.co.kr)', url: 'https://www.kovo.co.kr' },
+  runable: { category: '영화 · 스포츠 · 레저', name: '러너블 대회 신청 (runable.me)', url: 'https://runable.me' },
+  chuncheonmarathon: { category: '영화 · 스포츠 · 레저', name: '춘천마라톤 (chuncheonmarathon.com)', url: 'https://www.chuncheonmarathon.com' },
+
+  // 수강신청 · 포털 · 쇼핑 · 맛집
+  sugang: { category: '수강신청 · 포털 · 쇼핑', name: '전국 대학교 수강신청 표준시', url: 'https://www.naver.com' },
+  naver: { category: '수강신청 · 포털 · 쇼핑', name: '네이버 표준시 / 네이버예약 (naver.com)', url: 'https://www.naver.com' },
+  kakao: { category: '수강신청 · 포털 · 쇼핑', name: '카카오 / 카카오예약 (kakao.com)', url: 'https://www.kakao.com' },
+  catchtable: { category: '수강신청 · 포털 · 쇼핑', name: '캐치테이블 (catchtable.co.kr)', url: 'https://app.catchtable.co.kr' },
+  musinsa: { category: '수강신청 · 포털 · 쇼핑', name: '무신사 (musinsa.com)', url: 'https://www.musinsa.com' },
+  oliveyoung: { category: '수강신청 · 포털 · 쇼핑', name: '올리브영 (oliveyoung.co.kr)', url: 'https://www.oliveyoung.co.kr' },
+  '29cm': { category: '수강신청 · 포털 · 쇼핑', name: '29CM (29cm.co.kr)', url: 'https://www.29cm.co.kr' },
+  nike: { category: '수강신청 · 포털 · 쇼핑', name: '나이키 SNKRS (nike.com)', url: 'https://www.nike.com' },
+  popmart: { category: '수강신청 · 포털 · 쇼핑', name: '팝마트 (popmart.com)', url: 'https://www.popmart.com' },
+  witchform: { category: '수강신청 · 포털 · 쇼핑', name: '윗치폼 (witchform.com)', url: 'https://witchform.com' },
+  local: { category: '교실 기본 서버', name: '교실 표준 서버 (자체 정밀시계)', url: null },
 };
 
 const timeOffsetCache = new Map(); // key -> { offsetMs, fetchedAt, rttMs, fallback }
 
-async function getTargetTimeOffset(targetKey) {
-  const target = TIME_TARGETS[targetKey] || TIME_TARGETS.local;
+async function getTargetTimeOffset(targetKey, customUrl) {
+  let target = TIME_TARGETS[targetKey];
+  let cacheKey = targetKey;
+
+  if (targetKey === 'custom' && customUrl) {
+    let normalized = String(customUrl).trim();
+    if (!/^https?:\/\//i.test(normalized)) {
+      normalized = 'https://' + normalized;
+    }
+    try {
+      const parsed = new URL(normalized);
+      target = {
+        category: '직접 입력 도메인',
+        name: `직접 입력 (${parsed.hostname})`,
+        url: parsed.origin,
+      };
+      cacheKey = `custom:${parsed.hostname}`;
+    } catch (e) {
+      target = TIME_TARGETS.local;
+    }
+  }
+
+  if (!target) target = TIME_TARGETS.local;
   if (!target.url) {
     return { targetKey: 'local', name: target.name, offsetMs: 0, rttMs: 0, fallback: false };
   }
 
-  const cached = timeOffsetCache.get(targetKey);
+  const cached = timeOffsetCache.get(cacheKey);
   if (cached && Date.now() - cached.fetchedAt < 30000) {
     return { targetKey, name: target.name, ...cached };
   }
@@ -136,7 +202,7 @@ async function getTargetTimeOffset(targetKey) {
         // Adjust by half RTT; note HTTP Date has 1-second resolution
         const offsetMs = serverDateMs + 500 - (t0 + rttMs / 2);
         const entry = { offsetMs: Math.round(offsetMs), fetchedAt: Date.now(), rttMs, fallback: false };
-        timeOffsetCache.set(targetKey, entry);
+        timeOffsetCache.set(cacheKey, entry);
         return { targetKey, name: target.name, ...entry };
       }
     }
@@ -145,13 +211,14 @@ async function getTargetTimeOffset(targetKey) {
   }
 
   const fallbackEntry = { offsetMs: 0, fetchedAt: Date.now(), rttMs: 0, fallback: true };
-  timeOffsetCache.set(targetKey, fallbackEntry);
+  timeOffsetCache.set(cacheKey, fallbackEntry);
   return { targetKey, name: target.name, ...fallbackEntry };
 }
 
 app.get('/api/server-time', async (req, res) => {
   const targetKey = req.query.target || 'local';
-  const info = await getTargetTimeOffset(targetKey);
+  const customUrl = req.query.customUrl || '';
+  const info = await getTargetTimeOffset(targetKey, customUrl);
   res.json({
     ...info,
     serverNow: Date.now(),
@@ -163,7 +230,9 @@ app.get('/api/time-targets', (req, res) => {
   res.json(
     Object.entries(TIME_TARGETS).map(([key, val]) => ({
       key,
+      category: val.category || '기타',
       name: val.name,
+      url: val.url,
       hasExternalUrl: Boolean(val.url),
     }))
   );

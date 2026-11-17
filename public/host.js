@@ -24,6 +24,8 @@ const optsTicketing = document.getElementById('opts-ticketing');
 
 const lucky7Target = document.getElementById('lucky7Target');
 const lucky7Blind = document.getElementById('lucky7Blind');
+const btnVerVisible = document.getElementById('btnVerVisible');
+const btnVerBlind = document.getElementById('btnVerBlind');
 const clickerDuration = document.getElementById('clickerDuration');
 const clickerRule = document.getElementById('clickerRule');
 const ticketingServer = document.getElementById('ticketingServer');
@@ -198,6 +200,11 @@ function renderRoomState(state) {
 
   lucky7Target.value = String(state.options.lucky7.targetSec);
   lucky7Blind.value = String(state.options.lucky7.blindEnabled);
+  if (btnVerVisible && btnVerBlind) {
+    const isBlind = Boolean(state.options.lucky7.blindEnabled);
+    btnVerVisible.className = isBlind ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm';
+    btnVerBlind.className = isBlind ? 'btn btn-primary btn-sm' : 'btn btn-outline btn-sm';
+  }
   clickerDuration.value = String(state.options.clicker.durationSec);
   clickerRule.value = state.options.clicker.winnerRule;
   ticketingServer.value = state.options.ticketing.targetServer;
@@ -495,6 +502,17 @@ modeTabs.forEach((tab) => {
 [lucky7Target, lucky7Blind, clickerDuration, clickerRule, ticketingServer, ticketingSeat, ticketingCountdown].forEach(
   (el) => el.addEventListener('change', () => sendConfigUpdate())
 );
+
+if (btnVerVisible && btnVerBlind) {
+  btnVerVisible.addEventListener('click', () => {
+    lucky7Blind.value = 'false';
+    sendConfigUpdate('lucky7');
+  });
+  btnVerBlind.addEventListener('click', () => {
+    lucky7Blind.value = 'true';
+    sendConfigUpdate('lucky7');
+  });
+}
 
 startGameBtn.addEventListener('click', () => {
   socket.emit('host:start_game', (resp) => {

@@ -3,86 +3,380 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>티켓팅 혼자 연습 · 서버 시간 동기화</title>
+  <title>혼자 연습하기 · 행운의 7초 &amp; 티켓팅 서버시간 연습</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <div class="container-narrow" style="padding-top: 20px; padding-bottom: 40px;">
-    <div class="flex items-center justify-between mb-2">
-      <a href="/" class="btn btn-outline btn-sm">홈</a>
-      <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff;">티켓팅 연습장</span>
+    <!-- Header -->
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <a href="/" class="btn btn-outline btn-sm">홈</a>
+        <a href="/manual" class="btn btn-outline btn-sm">사용 설명서</a>
+      </div>
+      <span class="badge" style="background: rgba(168,85,247,0.2); color: #e9d5ff;">개인 연습장</span>
     </div>
 
-    <div class="card">
-      <h2 style="margin-top: 0;">서버 시간 동기화</h2>
-      <p class="text-muted" style="font-size: 0.9rem;">
-        원하는 예매 서버의 표준 시간을 불러와 내 기기와의 시간 오차를 맞춘 뒤, 정각 티켓팅을 연습해보세요.
-      </p>
+    <!-- Top Mode Selector Tabs -->
+    <div class="card mb-2" style="padding: 12px;">
+      <div class="mode-tabs" style="grid-template-columns: repeat(2, 1fr);">
+        <button type="button" id="tabBtnLucky7" class="mode-tab active">행운의 7초 혼자 연습</button>
+        <button type="button" id="tabBtnTicketing" class="mode-tab">티켓팅 서버시간 연습</button>
+      </div>
+    </div>
 
-      <div class="mt-2">
-        <label class="text-muted" style="font-size: 0.85rem;">서버 선택</label>
-        <div class="flex gap-2 mt-1">
-          <select id="serverSelect" class="select">
-            <option value="interpark">인터파크 티켓 서버</option>
-            <option value="melon">멜론 티켓 서버</option>
-            <option value="yes24">예스24 티켓 서버</option>
-            <option value="korail">코레일 예매 서버</option>
-            <option value="naver">네이버 표준 서버</option>
-            <option value="local">교실 자체 정밀 서버</option>
+    <!-- ======================================================== -->
+    <!-- SECTION 1: LUCKY 7 SOLO PRACTICE (2 VERSIONS)            -->
+    <!-- ======================================================== -->
+    <div id="sectionLucky7">
+      <div class="card">
+        <h2 style="margin-top: 0;">행운의 7초 혼자 연습</h2>
+        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
+          방장이 없어도 혼자서 <strong>숫자가 끝까지 보이는 버전</strong>과 <strong>3초 후 숫자가 가려지는 버전</strong> 두 가지를 선택해 타이밍 감각을 연습할 수 있습니다.
+        </p>
+
+        <!-- Version Toggle -->
+        <div class="mt-2" style="padding: 12px; border-radius: 12px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25);">
+          <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">연습 버전 선택</div>
+          <div class="flex gap-2">
+            <button type="button" id="soloVerVisibleBtn" class="btn btn-outline btn-sm" style="flex: 1;">
+              버전 1: 숫자 보임 모드
+            </button>
+            <button type="button" id="soloVerBlindBtn" class="btn btn-primary btn-sm" style="flex: 1;">
+              버전 2: 3초 후 가림 모드
+            </button>
+          </div>
+          <div id="soloVerDesc" class="text-muted mt-1" style="font-size: 0.82rem;">
+            시작 3.000초 후 타이머 숫자가 블라인드 처리됩니다. 마음속으로 세서 멈추세요.
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <label class="text-muted" style="font-size: 0.85rem;">목표 시간 선택</label>
+          <select id="soloTargetSec" class="select mt-1">
+            <option value="5">5.000초</option>
+            <option value="7" selected>7.000초 (기본)</option>
+            <option value="10">10.000초</option>
           </select>
-          <button id="syncBtn" class="btn btn-primary btn-sm" style="white-space: nowrap;">동기화</button>
+        </div>
+
+        <!-- Stopwatch Stage -->
+        <div class="text-center mt-3" style="padding: 20px 14px; border-radius: 14px; background: rgba(11, 16, 32, 0.75); border: 1px solid var(--border);">
+          <div class="badge" id="soloGoalBadge">목표: 7.000초 · 3초 후 가림</div>
+          <div id="soloClock" class="timer-display mt-2" style="font-size: 3.4rem;">0.000초</div>
+          <div id="soloBlindHint" class="text-muted mt-1" style="font-size: 0.85rem; min-height: 20px;">시작 버튼을 누르면 즉시 초시계가 작동합니다.</div>
+        </div>
+
+        <button type="button" id="soloStartStopBtn" class="tap-pad mt-3" style="min-height: 150px;">
+          연습 시작하기
+        </button>
+
+        <div id="soloResultBox" class="hidden mt-3 text-center" style="padding: 16px; border-radius: 12px; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35);">
+          <div id="soloResultGrade" style="font-size: 0.9rem; font-weight: 700; color: #6ee7b7;">측정 완료</div>
+          <div id="soloResultValue" style="font-size: 1.5rem; font-weight: 900; margin-top: 4px;">-</div>
+          <div id="soloBestValue" class="text-muted mt-1" style="font-size: 0.86rem;">-</div>
         </div>
       </div>
 
-      <div class="text-center mt-3" style="padding: 16px; border-radius: 14px; background: rgba(11, 16, 32, 0.7); border: 1px solid var(--border);">
-        <div id="serverNameLabel" class="text-muted" style="font-size: 0.85rem;">서버 시간 불러오는 중...</div>
-        <div id="liveServerClock" class="timer-display mt-1" style="font-size: 2.3rem; color: #fcd34d;">00:00:00.000</div>
-        <div id="offsetInfoLabel" class="text-muted mt-1" style="font-size: 0.8rem;">오차 측정 중...</div>
+      <div class="card mt-3">
+        <div class="flex justify-between items-center mb-2">
+          <h3 style="margin: 0; font-size: 1rem;">내 7초 연습 기록</h3>
+          <button type="button" id="clearSolo7LogBtn" class="btn btn-outline btn-sm">초기화</button>
+        </div>
+        <div id="solo7LogList" class="text-muted" style="font-size: 0.9rem;">아직 연습 기록이 없습니다.</div>
       </div>
     </div>
 
-    <!-- Practice Stage -->
-    <div class="card mt-3 text-center">
-      <h3 style="margin-top: 0;">실전 연습 (정각 클릭 + 포도알)</h3>
-      <div class="flex gap-2 justify-center mb-2">
-        <label class="flex items-center gap-1" style="font-size: 0.9rem;">
-          <input type="checkbox" id="withSeatCheck" checked /> 포도알 좌석 선택 포함
-        </label>
+    <!-- ======================================================== -->
+    <!-- SECTION 2: TICKETING SERVER-TIME SOLO PRACTICE           -->
+    <!-- ======================================================== -->
+    <div id="sectionTicketing" class="hidden">
+      <div class="card">
+        <h2 style="margin-top: 0;">서버 시간 동기화 &amp; 티켓팅 연습</h2>
+        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.55;">
+          인터파크·멜론·티켓링크·예스24·코레일·SRT·대학 수강신청 등 원하는 서버의 표준 시간을 불러와 기기 오차를 보정한 뒤 정각 티켓팅을 연습해보세요.
+        </p>
+
+        <div class="mt-2">
+          <label class="text-muted" style="font-size: 0.85rem;">예매처 / 서버 선택</label>
+          <div class="flex gap-2 mt-1">
+            <select id="serverSelect" class="select">
+              <optgroup label="공연 · 콘서트 · 팬클럽">
+                <option value="interpark" selected>인터파크 티켓 (ticket.interpark.com)</option>
+                <option value="nol-interpark">인터파크 NOL 티켓 (nol.interpark.com)</option>
+                <option value="melon">멜론티켓 (ticket.melon.com)</option>
+                <option value="ticketlink">티켓링크 (ticketlink.co.kr)</option>
+                <option value="yes24">예스24 티켓 (ticket.yes24.com)</option>
+                <option value="weverse">위버스 (weverse.io)</option>
+                <option value="coupangplay">쿠팡플레이 (coupangplay.com)</option>
+                <option value="fans">팬즈 FANS (app.fans)</option>
+                <option value="berriz">베리즈 (berriz.in)</option>
+                <option value="bstage">비스테이지 (bstage.in)</option>
+                <option value="sejongpac">세종문화회관 (sejongpac.or.kr)</option>
+              </optgroup>
+              <optgroup label="교통 · 여행 · 캠핑">
+                <option value="korail">코레일 KTX (letskorail.com)</option>
+                <option value="srt">SRT 승차권 (etk.srail.kr)</option>
+                <option value="knps">국립공원 예약시스템 (knps.or.kr)</option>
+                <option value="campingkorea">캠핑코리아 (campingkorea.or.kr)</option>
+                <option value="foresttrip">숲나들e 자연휴양림 (foresttrip.go.kr)</option>
+                <option value="yanolja">NOL 야놀자 (nol.yanolja.com)</option>
+                <option value="agoda">아고다 (agoda.com)</option>
+                <option value="trip">트립닷컴 (kr.trip.com)</option>
+              </optgroup>
+              <optgroup label="영화 · 스포츠 · 레저">
+                <option value="cgv">CGV (cgv.co.kr)</option>
+                <option value="megabox">메가박스 (megabox.co.kr)</option>
+                <option value="lottecinema">롯데시네마 (lottecinema.co.kr)</option>
+                <option value="doosanbears">두산 베어스 (doosanbears.com)</option>
+                <option value="ssglanders">SSG 랜더스 (ssglanders.com)</option>
+                <option value="lgtwins">LG 트윈스 (lgtwins.com)</option>
+                <option value="kbl">KBL 프로농구 (kbl.or.kr)</option>
+                <option value="kovo">KOVO 프로배구 (kovo.co.kr)</option>
+                <option value="runable">러너블 마라톤 (runable.me)</option>
+                <option value="chuncheonmarathon">춘천마라톤 (chuncheonmarathon.com)</option>
+              </optgroup>
+              <optgroup label="수강신청 · 포털 · 쇼핑 · 맛집">
+                <option value="sugang">전국 대학교 수강신청 표준시</option>
+                <option value="naver">네이버 표준시 / 네이버예약 (naver.com)</option>
+                <option value="kakao">카카오 / 카카오예약 (kakao.com)</option>
+                <option value="catchtable">캐치테이블 (catchtable.co.kr)</option>
+                <option value="musinsa">무신사 (musinsa.com)</option>
+                <option value="oliveyoung">올리브영 (oliveyoung.co.kr)</option>
+                <option value="29cm">29CM (29cm.co.kr)</option>
+                <option value="nike">나이키 SNKRS (nike.com)</option>
+                <option value="popmart">팝마트 (popmart.com)</option>
+                <option value="witchform">윗치폼 (witchform.com)</option>
+              </optgroup>
+              <optgroup label="기타 / 직접 입력">
+                <option value="local">교실 표준 서버 (자체 정밀시계)</option>
+                <option value="custom">직접 도메인 입력 (대학교/기타 사이트)</option>
+              </optgroup>
+            </select>
+            <button id="syncBtn" class="btn btn-primary btn-sm" style="white-space: nowrap;">동기화</button>
+          </div>
+        </div>
+
+        <div id="customDomainWrap" class="mt-2 hidden">
+          <input id="customDomainInput" class="input" placeholder="도메인 입력 (예: sugang.snu.ac.kr)" />
+        </div>
+
+        <div class="text-center mt-3" style="padding: 16px; border-radius: 14px; background: rgba(11, 16, 32, 0.7); border: 1px solid var(--border);">
+          <div id="serverNameLabel" class="text-muted" style="font-size: 0.85rem;">서버 시간 불러오는 중...</div>
+          <div id="liveServerClock" class="timer-display mt-1" style="font-size: 2.3rem; color: #fcd34d;">00:00:00.000</div>
+          <div id="offsetInfoLabel" class="text-muted mt-1" style="font-size: 0.8rem;">오차 측정 중...</div>
+        </div>
+
+        <div class="text-muted mt-2" style="font-size: 0.82rem; text-align: right;">
+          참고 사이트: <a href="https://www.tickettime.co.kr/" target="_blank" rel="noreferrer" style="color: #93c5fd; text-decoration: underline;">티켓타임 (https://www.tickettime.co.kr/) ↗</a>
+        </div>
       </div>
 
-      <div id="practiceIdle">
-        <button id="startPracticeBtn" class="btn btn-primary btn-lg w-full">
-          5초 뒤 오픈 연습 시작
-        </button>
+      <!-- Practice Stage -->
+      <div class="card mt-3 text-center">
+        <h3 style="margin-top: 0;">실전 연습 (정각 클릭 + 포도알)</h3>
+        <div class="flex gap-2 justify-center mb-2">
+          <label class="flex items-center gap-1" style="font-size: 0.9rem;">
+            <input type="checkbox" id="withSeatCheck" checked /> 포도알 좌석 선택 포함
+          </label>
+        </div>
+
+        <div id="practiceIdle">
+          <button id="startPracticeBtn" class="btn btn-primary btn-lg w-full">
+            5초 뒤 오픈 연습 시작
+          </button>
+        </div>
+
+        <div id="practiceActive" class="hidden">
+          <div id="practiceStatusText" style="font-weight: 800; font-size: 1.1rem; color: #fcd34d;">오픈까지 5초...</div>
+          <button id="practiceBookBtn" class="tap-pad mt-2" style="min-height: 160px; background: #334155;">
+            오픈 대기 중...
+          </button>
+        </div>
+
+        <div id="practiceSeatStep" class="hidden mt-2">
+          <div style="font-weight: 800; margin-bottom: 10px; color: #e9d5ff;">보라색 좌석 1개를 빠르게 터치하세요</div>
+          <div id="practiceSeatGrid" class="seat-grid"></div>
+        </div>
+
+        <div id="practiceResultBox" class="hidden mt-3" style="padding: 14px; border-radius: 12px; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35);">
+          <div id="practiceResultText" style="font-size: 1.25rem; font-weight: 900;">-</div>
+          <button id="retryPracticeBtn" class="btn btn-outline btn-sm mt-2">다시 연습하기</button>
+        </div>
       </div>
 
-      <div id="practiceActive" class="hidden">
-        <div id="practiceStatusText" style="font-weight: 800; font-size: 1.1rem; color: #fcd34d;">오픈까지 5초...</div>
-        <button id="practiceBookBtn" class="tap-pad mt-2" style="min-height: 160px; background: #334155;">
-          오픈 대기 중...
-        </button>
-      </div>
-
-      <div id="practiceSeatStep" class="hidden mt-2">
-        <div style="font-weight: 800; margin-bottom: 10px; color: #e9d5ff;">보라색 좌석 1개를 빠르게 터치하세요</div>
-        <div id="practiceSeatGrid" class="seat-grid"></div>
-      </div>
-
-      <div id="practiceResultBox" class="hidden mt-3" style="padding: 14px; border-radius: 12px; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35);">
-        <div id="practiceResultText" style="font-size: 1.25rem; font-weight: 900;">-</div>
-        <button id="retryPracticeBtn" class="btn btn-outline btn-sm mt-2">다시 연습하기</button>
+      <!-- Recent Practice Log -->
+      <div class="card mt-3">
+        <h3 style="margin: 0 0 8px; font-size: 1rem;">내 티켓팅 연습 기록</h3>
+        <div id="practiceLog" class="text-muted" style="font-size: 0.9rem;">아직 연습 기록이 없습니다.</div>
       </div>
     </div>
 
-    <!-- Recent Practice Log -->
-    <div class="card mt-3">
-      <h3 style="margin: 0 0 8px; font-size: 1rem;">내 연습 기록</h3>
-      <div id="practiceLog" class="text-muted" style="font-size: 0.9rem;">아직 연습 기록이 없습니다.</div>
-    </div>
+    <footer class="text-center mt-3" style="padding: 16px 0 0; border-top: 1px solid var(--border); font-size: 0.84rem; color: var(--text-muted);">
+      개인 연습 기록은 현재 브라우저 화면에서만 표시되며 서버에 저장되지 않습니다. ·
+      <a href="https://blog.naver.com/math-tong" target="_blank" rel="noreferrer" style="color: #fcd34d; font-weight: 700; text-decoration: underline;">math-tong 공식 블로그 ↗</a>
+    </footer>
   </div>
 
   <script>
+    // --- Tab Switching ---
+    const tabBtnLucky7 = document.getElementById('tabBtnLucky7');
+    const tabBtnTicketing = document.getElementById('tabBtnTicketing');
+    const sectionLucky7 = document.getElementById('sectionLucky7');
+    const sectionTicketing = document.getElementById('sectionTicketing');
+
+    tabBtnLucky7.addEventListener('click', () => {
+      tabBtnLucky7.classList.add('active');
+      tabBtnTicketing.classList.remove('active');
+      sectionLucky7.classList.remove('hidden');
+      sectionTicketing.classList.add('hidden');
+    });
+
+    tabBtnTicketing.addEventListener('click', () => {
+      tabBtnTicketing.classList.add('active');
+      tabBtnLucky7.classList.remove('active');
+      sectionTicketing.classList.remove('hidden');
+      sectionLucky7.classList.add('hidden');
+    });
+
+    // --- Section 1: Lucky 7 Solo Practice ---
+    const soloVerVisibleBtn = document.getElementById('soloVerVisibleBtn');
+    const soloVerBlindBtn = document.getElementById('soloVerBlindBtn');
+    const soloVerDesc = document.getElementById('soloVerDesc');
+    const soloTargetSec = document.getElementById('soloTargetSec');
+    const soloGoalBadge = document.getElementById('soloGoalBadge');
+    const soloClock = document.getElementById('soloClock');
+    const soloBlindHint = document.getElementById('soloBlindHint');
+    const soloStartStopBtn = document.getElementById('soloStartStopBtn');
+    const soloResultBox = document.getElementById('soloResultBox');
+    const soloResultGrade = document.getElementById('soloResultGrade');
+    const soloResultValue = document.getElementById('soloResultValue');
+    const soloBestValue = document.getElementById('soloBestValue');
+    const solo7LogList = document.getElementById('solo7LogList');
+    const clearSolo7LogBtn = document.getElementById('clearSolo7LogBtn');
+
+    let soloBlindMode = true;
+    let soloRunning = false;
+    let soloStartPerf = 0;
+    let soloTimer = null;
+    let solo7Logs = [];
+    let soloBestDiff = null;
+
+    function updateSoloHeader() {
+      const target = Number(soloTargetSec.value || 7);
+      soloVerVisibleBtn.className = soloBlindMode ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm';
+      soloVerBlindBtn.className = soloBlindMode ? 'btn btn-primary btn-sm' : 'btn btn-outline btn-sm';
+      soloVerDesc.textContent = soloBlindMode
+        ? '버전 2 (3초 후 가림): 시작 3.000초 후 타이머 숫자가 블라인드 처리됩니다.'
+        : '버전 1 (숫자 보임): 초시계 숫자가 끝까지 보입니다. 정확한 순간에 멈추세요.';
+      soloGoalBadge.textContent = `목표: ${target}.000초 · ${soloBlindMode ? '버전 2 (3초 후 가림)' : '버전 1 (숫자 보임)'}`;
+    }
+
+    soloVerVisibleBtn.addEventListener('click', () => {
+      if (soloRunning) return;
+      soloBlindMode = false;
+      updateSoloHeader();
+    });
+
+    soloVerBlindBtn.addEventListener('click', () => {
+      if (soloRunning) return;
+      soloBlindMode = true;
+      updateSoloHeader();
+    });
+
+    soloTargetSec.addEventListener('change', () => {
+      if (soloRunning) return;
+      updateSoloHeader();
+    });
+
+    soloStartStopBtn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (!soloRunning) {
+        // Start
+        soloRunning = true;
+        soloStartPerf = performance.now();
+        soloClock.classList.remove('timer-blind');
+        soloResultBox.classList.add('hidden');
+        soloStartStopBtn.classList.add('stop-pad');
+        soloStartStopBtn.textContent = '지금 멈추기';
+        soloBlindHint.textContent = soloBlindMode ? '3.000초 후 숫자가 가려집니다...' : '목표 시간에 맞춰 멈추세요!';
+
+        soloTimer = setInterval(() => {
+          const elapsed = performance.now() - soloStartPerf;
+          soloClock.textContent = (elapsed / 1000).toFixed(3) + '초';
+          if (soloBlindMode && elapsed >= 3000) {
+            soloClock.classList.add('timer-blind');
+            soloBlindHint.textContent = '블라인드 중 — 마음속으로 세세요';
+          }
+        }, 25);
+      } else {
+        // Stop
+        soloRunning = false;
+        clearInterval(soloTimer);
+        const elapsedMs = Math.round(performance.now() - soloStartPerf);
+        const targetMs = Number(soloTargetSec.value || 7) * 1000;
+        const diffMs = elapsedMs - targetMs;
+        const absDiffMs = Math.abs(diffMs);
+
+        soloClock.classList.remove('timer-blind');
+        soloClock.textContent = (elapsedMs / 1000).toFixed(3) + '초';
+        soloBlindHint.textContent = '다시 시도하려면 아래 버튼을 누르세요.';
+        soloStartStopBtn.classList.remove('stop-pad');
+        soloStartStopBtn.textContent = '다시 시작하기';
+
+        if (navigator.vibrate) navigator.vibrate(25);
+
+        const sign = diffMs > 0 ? '+' : diffMs < 0 ? '-' : '';
+        const diffStr = `${sign}${(absDiffMs / 1000).toFixed(3)}초`;
+
+        if (soloBestDiff === null || absDiffMs < soloBestDiff.absDiffMs) {
+          soloBestDiff = { elapsedMs, diffStr, absDiffMs };
+        }
+
+        soloResultBox.classList.remove('hidden');
+        soloResultGrade.textContent =
+          absDiffMs === 0 ? 'PERFECT! 정확히 일치했습니다!' : absDiffMs <= 50 ? '초고수 타이밍!' : '측정 완료';
+        soloResultValue.textContent = `${(elapsedMs / 1000).toFixed(3)}초 (오차 ${diffStr})`;
+        soloBestValue.textContent = `내 최고 기록: ${(soloBestDiff.elapsedMs / 1000).toFixed(3)}초 (오차 ${soloBestDiff.diffStr})`;
+
+        solo7Logs.unshift({
+          ver: soloBlindMode ? '3초 후 가림' : '숫자 보임',
+          target: soloTargetSec.value,
+          elapsedMs,
+          diffStr,
+        });
+        renderSolo7Logs();
+      }
+    });
+
+    function renderSolo7Logs() {
+      if (solo7Logs.length === 0) {
+        solo7LogList.innerHTML = '아직 연습 기록이 없습니다.';
+        return;
+      }
+      solo7LogList.innerHTML = solo7Logs
+        .slice(0, 10)
+        .map(
+          (item, i) => `
+          <div class="flex justify-between items-center" style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <span>#${solo7Logs.length - i} [${item.ver} · ${item.target}초]</span>
+            <strong>${(item.elapsedMs / 1000).toFixed(3)}초 (오차 ${item.diffStr})</strong>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    clearSolo7LogBtn.addEventListener('click', () => {
+      solo7Logs = [];
+      soloBestDiff = null;
+      renderSolo7Logs();
+    });
+
+    // --- Section 2: Ticketing Practice ---
     const serverSelect = document.getElementById('serverSelect');
+    const customDomainWrap = document.getElementById('customDomainWrap');
+    const customDomainInput = document.getElementById('customDomainInput');
     const syncBtn = document.getElementById('syncBtn');
     const serverNameLabel = document.getElementById('serverNameLabel');
     const liveServerClock = document.getElementById('liveServerClock');
@@ -111,13 +405,15 @@
 
     async function syncServerTime() {
       const target = serverSelect.value;
+      customDomainWrap.classList.toggle('hidden', target !== 'custom');
+      const customUrl = customDomainInput.value.trim();
       serverNameLabel.textContent = '서버 시간 측정 중...';
       try {
         const t0 = performance.now();
-        const res = await fetch(`/api/server-time?target=${encodeURIComponent(target)}`);
+        const q = `/api/server-time?target=${encodeURIComponent(target)}&customUrl=${encodeURIComponent(customUrl)}`;
+        const res = await fetch(q);
         const data = await res.json();
         const localRtt = Math.round(performance.now() - t0);
-        // serverNow vs Date.now() + external offset
         const clientToBackendOffset = data.serverNow + localRtt / 2 - Date.now();
         serverOffsetMs = clientToBackendOffset + (data.offsetMs || 0);
 
