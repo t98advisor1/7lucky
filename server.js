@@ -705,6 +705,12 @@ io.on('connection', (socket) => {
         room.timers.endGame = setTimeout(() => {
           finalizeCurrentRound(room);
         }, durationMs + 700); // 700ms grace period for final packets
+      } else if (mode === 'lucky7') {
+        const autoEndMs = 15000;
+        endsAt = startedAt + autoEndMs;
+        room.timers.endGame = setTimeout(() => {
+          finalizeCurrentRound(room);
+        }, autoEndMs);
       }
 
       room.currentRound.startedAt = startedAt;

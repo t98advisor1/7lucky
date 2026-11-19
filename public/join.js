@@ -379,15 +379,19 @@ socket.on('game:start', ({ mode, options, endsAt, serverNow }) => {
     pLucky7Result.classList.add('hidden');
     pLucky7Clock.classList.remove('timer-blind');
     pLucky7Goal.textContent = `목표: ${options.targetSec}.000초`;
-    pLucky7BlindHint.textContent = options.blindEnabled ? '3초 후 숫자가 가려집니다!' : '';
+    pLucky7BlindHint.textContent = options.blindEnabled
+      ? '3초 후 숫자가 가려집니다! (15초 후 자동 종료)'
+      : '15초 후 자동 종료됩니다.';
 
     const blindAfterMs = (options.blindAfterSec || 3) * 1000;
     localTimerInterval = setInterval(() => {
       const elapsed = performance.now() - lucky7StartPerf;
-      pLucky7Clock.textContent = formatMsToSec(elapsed);
       if (options.blindEnabled && elapsed >= blindAfterMs && !lucky7Submitted) {
         pLucky7Clock.classList.add('timer-blind');
-        pLucky7BlindHint.textContent = '블라인드 중 — 마음속으로 세세요';
+        pLucky7Clock.textContent = '?.???초';
+        pLucky7BlindHint.textContent = '블라인드 중 — 마음속으로 세세요 (15초 자동 종료)';
+      } else {
+        pLucky7Clock.textContent = formatMsToSec(elapsed);
       }
     }, 25);
   } else if (mode === 'clicker') {

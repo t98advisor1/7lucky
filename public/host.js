@@ -5,6 +5,7 @@ let liveTimerInterval = null;
 let countdownInterval = null;
 let networkInfo = { primaryIp: 'localhost', port: 3000 };
 let ticketingOffsetMs = 0;
+let hostLucky7Blinded = false;
 
 // DOM Elements
 const roomCodeText = document.getElementById('roomCodeText');
@@ -122,6 +123,10 @@ function stopStageTimers() {
   if (countdownInterval) {
     clearInterval(countdownInterval);
     countdownInterval = null;
+  }
+  hostLucky7Blinded = false;
+  if (hostLiveClock) {
+    hostLiveClock.classList.remove('timer-blind');
   }
 }
 
@@ -242,6 +247,18 @@ function renderRoomState(state) {
   }
 
   if (state.status === 'playing' && state.currentRound) {
+    if (
+      state.currentRound.mode === 'lucky7' &&
+      state.currentRound.options?.blindEnabled &&
+      state.currentRound.startedAt
+    ) {
+      const blindAfterMs = (state.currentRound.options.blindAfterSec || 3) * 1000;
+      if (Date.now() - state.currentRound.startedAt >= blindAfterMs) {
+        hostLucky7Blinded = true;
+        hostLiveClock.classList.add('timer-blind');
+        hostLiveClock.textContent = '?.???초';
+      }
+    }
     renderLiveResults(state.currentRound.mode, state.currentRound.results || []);
   }
 
@@ -260,6 +277,23 @@ function renderLiveResults(mode, results) {
     }
   }
   if (mode === 'lucky7') {
+    const isBlindActive =
+      roomState?.status === 'playing' &&
+      roomState?.currentRound?.options?.blindEnabled &&
+      hostLucky7Blinded;
+
+    if (isBlindActive) {
+      liveResultsContainer.innerHTML = `
+        <div class="text-center" style="padding: 28px 16px; border-radius: 14px; background: rgba(15, 23, 42, 0.45); border: 1px dashed rgba(148, 163, 184, 0.35);">
+          <div style="font-size: 1.08rem; font-weight: 700; color: #e2e8f0;">블라인드 중계 숨김 중</div>
+          <div class="text-muted mt-1" style="font-size: 0.92rem;">
+            현재 <strong>${results.length}명</strong> 제출 완료 · 15초 후 자동 종료되며 순위가 공개됩니다!
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     if (results.length === 0) {
       liveResultsContainer.innerHTML = '<div class="text-center text-muted">아직 멈춘 학생이 없습니다...</div>';
       return;
@@ -458,10 +492,25 @@ socket.on('game:start', ({ mode, options, startedAt, endsAt, serverNow }) => {
   const localStartPerf = performance.now();
 
   if (mode === 'lucky7') {
-    hostLiveSub.textContent = `목표: ${options.targetSec}.000초 · 학생들이 멈추는 중입니다!`;
+    hostLucky7Blinded = false;
+    hostLiveClock.classList.remove('timer-blind');
+    const blindAfterMs = (options.blindAfterSec || 3) * 1000;
+    hostLiveSub.textContent = options.blindEnabled
+      ? `목표: ${options.targetSec}.000초 · 3초 후 시계와 중계가 가려집니다! (15초 자동 종료)`
+      : `목표: ${options.targetSec}.000초 · 학생들이 멈추는 중입니다! (15초 자동 종료)`;
     liveTimerInterval = setInterval(() => {
       const elapsed = performance.now() - localStartPerf;
-      hostLiveClock.textContent = formatMsToSec(elapsed);
+      if (options.blindEnabled && elapsed >= blindAfterMs) {
+        if (!hostLucky7Blinded) {
+          hostLucky7Blinded = true;
+          hostLiveClock.classList.add('timer-blind');
+          hostLiveClock.textContent = '?.???초';
+          hostLiveSub.textContent = '블라인드 진행 중 · 시계와 실시간 중계가 숨겨집니다 (15초 자동 종료)';
+          renderLiveResults('lucky7', roomState?.currentRound?.results || []);
+        }
+      } else {
+        hostLiveClock.textContent = formatMsToSec(elapsed);
+      }
     }, 31);
   } else if (mode === 'clicker') {
     hostLiveSub.textContent = `광클 진행 중! (${options.durationSec}초)`;
@@ -481,6 +530,9 @@ socket.on('game:start', ({ mode, options, startedAt, endsAt, serverNow }) => {
 
 socket.on('game:live_results', ({ mode, results }) => {
   if (roomState && roomState.status === 'playing') {
+    if (roomState.currentRound) {
+      roomState.currentRound.results = results;
+    }
     renderLiveResults(mode, results);
   }
 });
