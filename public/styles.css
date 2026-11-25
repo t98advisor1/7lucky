@@ -705,3 +705,54 @@ tr.winner-row {
   display: block;
 }
 
+/* Footer Book Link (matching T-ong digital notebook style) */
+.footer-brand-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.footer-sep {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.book-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 4px 11px 4px 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.book-mini img {
+  width: 24px;
+  height: auto;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.book-mini span {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.book-mini b {
+  color: #fde047;
+  font-weight: 800;
+}
+
+.book-mini:hover {
+  border-color: rgba(250, 204, 21, 0.55);
+  background: rgba(250, 204, 21, 0.1);
+  transform: translateY(-1px);
+}
+
+
