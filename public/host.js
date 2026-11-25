@@ -13,6 +13,8 @@ const qrImage = document.getElementById('qrImage');
 const joinUrlInput = document.getElementById('joinUrlInput');
 const updateQrBtn = document.getElementById('updateQrBtn');
 const copyUrlBtn = document.getElementById('copyUrlBtn');
+const downloadQrImgBtn = document.getElementById('downloadQrImgBtn');
+const downloadResultImgBtn = document.getElementById('downloadResultImgBtn');
 const playerCountBadge = document.getElementById('playerCountBadge');
 const playerChips = document.getElementById('playerChips');
 const roundBadge = document.getElementById('roundBadge');
@@ -808,5 +810,303 @@ exportCsvBtn.addEventListener('click', () => {
   a.download = `복불복_누적기록_${roomState.code}.csv`;
   a.click();
 });
+
+// --- KakaoTalk Share Image Export (PNG) ---
+function drawRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function triggerCanvasPngDownload(canvas, filename, btnEl) {
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+    if (btnEl) {
+      const orig = btnEl.textContent;
+      btnEl.textContent = 'PNG 저장 완료!';
+      setTimeout(() => {
+        btnEl.textContent = orig;
+      }, 2000);
+    }
+  }, 'image/png');
+}
+
+function downloadQrShareImage() {
+  if (!roomState || !qrImage || !qrImage.src) {
+    alert('QR 코드가 아직 준비되지 않았습니다.');
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const W = 800;
+    const H = 1040;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Background gradient
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0b1120');
+    bg.addColorStop(1, '#1e1b4b');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Outer card border
+    drawRoundRect(ctx, 28, 28, W - 56, H - 56, 32);
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.72)';
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(250, 204, 21, 0.35)';
+    ctx.stroke();
+
+    // Badge
+    drawRoundRect(ctx, W / 2 - 170, 68, 340, 44, 22);
+    ctx.fillStyle = 'rgba(99, 102, 241, 0.25)';
+    ctx.fill();
+    ctx.fillStyle = '#c7d2fe';
+    ctx.font = 'bold 22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('우리 반 실시간 손가락 대항전', W / 2, 98);
+
+    // Main Title
+    ctx.fillStyle = '#fde047';
+    ctx.font = '900 46px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText('딱 7.000초를 잡아라!', W / 2, 174);
+
+    // White QR Card
+    const qrBoxSize = 450;
+    const qrBoxX = (W - qrBoxSize) / 2;
+    const qrBoxY = 220;
+    drawRoundRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.drawImage(img, qrBoxX + 25, qrBoxY + 25, qrBoxSize - 50, qrBoxSize - 50);
+
+    // Room Code Pill
+    drawRoundRect(ctx, W / 2 - 220, 710, 440, 86, 20);
+    ctx.fillStyle = 'rgba(250, 204, 21, 0.14)';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(250, 204, 21, 0.5)';
+    ctx.stroke();
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = 'bold 20px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText('방 코드 (6자리)', W / 2, 742);
+
+    ctx.fillStyle = '#fde047';
+    ctx.font = '900 40px Consolas, monospace';
+    ctx.fillText(roomState.code.split('').join(' '), W / 2, 782);
+
+    // Join URL
+    const joinUrl = joinUrlInput.value.trim() || getDefaultJoinUrl(roomState.code);
+    ctx.fillStyle = '#93c5fd';
+    ctx.font = 'bold 22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText(joinUrl.length > 48 ? joinUrl.slice(0, 48) + '...' : joinUrl, W / 2, 856);
+
+    // Instructions
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 24px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText('카메라로 QR을 스캔하거나 링크로 바로 입장하세요!', W / 2, 916);
+
+    // Footer
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 18px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText('Copyright © math-tong. All rights reserved.', W / 2, 976);
+
+    triggerCanvasPngDownload(canvas, `딱7초_QR초대장_${roomState.code}.png`, downloadQrImgBtn);
+  };
+  img.src = qrImage.src;
+}
+
+function downloadResultShareImage() {
+  if (!roomState || !roomState.currentRound) {
+    alert('저장할 게임 결과가 없습니다.');
+    return;
+  }
+
+  const round = roomState.currentRound;
+  const results = round.results || [];
+  const topRows = results.slice(0, 12);
+  const extraCount = Math.max(0, results.length - topRows.length);
+
+  const W = 860;
+  const headerH = 330;
+  const rowH = 54;
+  const tableHeaderH = 48;
+  const footerH = extraCount > 0 ? 115 : 85;
+  const H = headerH + tableHeaderH + Math.max(1, topRows.length) * rowH + footerH;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Background gradient
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0b1120');
+  bg.addColorStop(1, '#172554');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Outer border
+  drawRoundRect(ctx, 24, 24, W - 48, H - 48, 28);
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.78)';
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(99, 102, 241, 0.4)';
+  ctx.stroke();
+
+  // Header badge & title
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#93c5fd';
+  ctx.font = 'bold 22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText(`제 ${round.roundNumber}라운드 결과 · ${getModeLabel(round.mode)}`, W / 2, 78);
+
+  ctx.fillStyle = '#fde047';
+  ctx.font = '900 40px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText('딱 7.000초를 잡아라! 최종 순위', W / 2, 130);
+
+  // Winner Banner
+  drawRoundRect(ctx, 56, 158, W - 112, 134, 20);
+  ctx.fillStyle = 'rgba(245, 158, 11, 0.16)';
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(245, 158, 11, 0.55)';
+  ctx.stroke();
+
+  ctx.fillStyle = '#fde047';
+  ctx.font = 'bold 20px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText('이번 라운드 당첨 / 1등', W / 2, 192);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 34px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText(winnerName.textContent || '-', W / 2, 238);
+
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = '600 20px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText(winnerDetail.textContent || '', W / 2, 274);
+
+  // Table header
+  const tableX = 56;
+  const tableW = W - 112;
+  let y = headerH;
+
+  drawRoundRect(ctx, tableX, y, tableW, tableHeaderH, 12);
+  ctx.fillStyle = 'rgba(30, 41, 59, 0.95)';
+  ctx.fill();
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 20px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('순위', tableX + 24, y + 31);
+  ctx.fillText('닉네임', tableX + 120, y + 31);
+  ctx.textAlign = 'right';
+  if (round.mode === 'lucky7') {
+    ctx.fillText('기록', tableX + tableW - 200, y + 31);
+    ctx.fillText('오차', tableX + tableW - 24, y + 31);
+  } else if (round.mode === 'clicker') {
+    ctx.fillText('클릭 수', tableX + tableW - 160, y + 31);
+    ctx.fillText('비고', tableX + tableW - 24, y + 31);
+  } else {
+    ctx.fillText('완료시간', tableX + tableW - 200, y + 31);
+    ctx.fillText('좌석', tableX + tableW - 24, y + 31);
+  }
+
+  y += tableHeaderH;
+
+  if (topRows.length === 0) {
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText('제출된 참여 기록이 없습니다.', W / 2, y + 36);
+    y += rowH;
+  } else {
+    topRows.forEach((r, idx) => {
+      const isWinner = round.specialWinner && r.playerId === round.specialWinner.playerId;
+      if (isWinner) {
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.14)';
+        ctx.fillRect(tableX, y + 2, tableW, rowH - 4);
+      } else if (idx % 2 === 1) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.fillRect(tableX, y + 2, tableW, rowH - 4);
+      }
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.14)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(tableX, y + rowH);
+      ctx.lineTo(tableX + tableW, y + rowH);
+      ctx.stroke();
+
+      const textY = y + 35;
+      ctx.textAlign = 'left';
+      ctx.fillStyle = isWinner ? '#fde047' : '#e2e8f0';
+      ctx.font = 'bold 22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+      ctx.fillText(`${r.rank}위`, tableX + 24, textY);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = (isWinner ? 'bold ' : '') + '22px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+      const nick = String(r.nickname || '');
+      ctx.fillText(nick.length > 14 ? nick.slice(0, 14) + '…' : nick, tableX + 120, textY);
+
+      ctx.textAlign = 'right';
+      if (round.mode === 'lucky7') {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(formatMsToSec(r.elapsedMs), tableX + tableW - 200, textY);
+        ctx.fillStyle = isWinner ? '#fde047' : '#93c5fd';
+        ctx.fillText(formatDiffMs(r.diffMs), tableX + tableW - 24, textY);
+      } else if (round.mode === 'clicker') {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(`${r.clicks}회`, tableX + tableW - 160, textY);
+        ctx.fillStyle = '#fde047';
+        ctx.fillText(isWinner ? '당첨' : '-', tableX + tableW - 24, textY);
+      } else {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(formatMsToSec(r.totalMs), tableX + tableW - 200, textY);
+        ctx.fillStyle = '#d8b4fe';
+        ctx.fillText(String(r.seatLabel || '자유석'), tableX + tableW - 24, textY);
+      }
+
+      y += rowH;
+    });
+  }
+
+  ctx.textAlign = 'center';
+  if (extraCount > 0) {
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '600 19px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+    ctx.fillText(`외 ${extraCount}명 참여 (총 ${results.length}명)`, W / 2, y + 34);
+  }
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '600 18px "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText(`방 코드 ${roomState.code} · Copyright © math-tong. All rights reserved.`, W / 2, H - 44);
+
+  triggerCanvasPngDownload(canvas, `딱7초_R${round.roundNumber}_결과_${roomState.code}.png`, downloadResultImgBtn);
+}
+
+if (downloadQrImgBtn) {
+  downloadQrImgBtn.addEventListener('click', downloadQrShareImage);
+}
+if (downloadResultImgBtn) {
+  downloadResultImgBtn.addEventListener('click', downloadResultShareImage);
+}
 
 init();
