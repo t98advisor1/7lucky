@@ -23,11 +23,48 @@ function getKstDateKey() {
   return now.toISOString().slice(0, 10);
 }
 
+const VISITOR_NS = process.env.VISITOR_NAMESPACE || 'mathtong-lucky7-kr';
+const VISITOR_BASE_TOTAL = Math.max(0, Number(process.env.VISITOR_BASE_TOTAL || 0) || 0);
+
 const visitorStats = {
   dateKey: getKstDateKey(),
   today: 0,
-  total: 0,
+  total: VISITOR_BASE_TOTAL,
+  synced: false,
 };
+
+async function fetchCounter(action, key) {
+  try {
+    const resp = await fetch(
+      `https://abacus.jasoncameron.dev/${action}/${encodeURIComponent(VISITOR_NS)}/${encodeURIComponent(key)}`,
+      { signal: AbortSignal.timeout(2500) }
+    );
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return typeof data?.value === 'number' ? data.value : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+async function syncVisitorStatsFromRemote() {
+  const currentKey = getKstDateKey();
+  if (visitorStats.dateKey !== currentKey) {
+    visitorStats.dateKey = currentKey;
+    visitorStats.today = 0;
+  }
+  const [remoteTotal, remoteToday] = await Promise.all([
+    fetchCounter('get', 'total'),
+    fetchCounter('get', `day-${currentKey}`),
+  ]);
+  if (remoteTotal !== null) {
+    visitorStats.total = Math.max(visitorStats.total, VISITOR_BASE_TOTAL + remoteTotal);
+  }
+  if (remoteToday !== null) {
+    visitorStats.today = Math.max(visitorStats.today, remoteToday);
+  }
+  visitorStats.synced = true;
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -82,8 +119,11 @@ app.post('/api/admin/login', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/admin/rooms', (req, res) => {
+app.get('/api/admin/rooms', async (req, res) => {
   if (!requireAdmin(req, res)) return;
+  if (!visitorStats.synced) {
+    await syncVisitorStatsFromRemote();
+  }
   const list = Array.from(rooms.values())
     .map((room) => {
       const playersArr = Array.from(room.players.values());
@@ -149,15 +189,29 @@ app.post('/api/admin/reset-all', (req, res) => {
   res.json({ ok: true, clearedRooms: count, resetVisitors });
 });
 
-app.get('/api/visitors', (req, res) => {
+app.get('/api/visitors', async (req, res) => {
   const currentKey = getKstDateKey();
   if (visitorStats.dateKey !== currentKey) {
     visitorStats.dateKey = currentKey;
     visitorStats.today = 0;
+    visitorStats.synced = false;
   }
   if (req.query.hit === '1') {
     visitorStats.today += 1;
     visitorStats.total += 1;
+    const [remoteTotal, remoteToday] = await Promise.all([
+      fetchCounter('hit', 'total'),
+      fetchCounter('hit', `day-${currentKey}`),
+    ]);
+    if (remoteTotal !== null) {
+      visitorStats.total = Math.max(visitorStats.total, VISITOR_BASE_TOTAL + remoteTotal);
+    }
+    if (remoteToday !== null) {
+      visitorStats.today = Math.max(visitorStats.today, remoteToday);
+    }
+    visitorStats.synced = true;
+  } else if (!visitorStats.synced) {
+    await syncVisitorStatsFromRemote();
   }
   const onlineCount = Math.max(1, io.engine ? io.engine.clientsCount : 1);
   res.json({
@@ -959,6 +1013,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
+  syncVisitorStatsFromRemote();
   const ips = getLocalIPv4s();
   console.log('====================================================');
   console.log('🎯 행운의 7초 & 교실 복불복 서버가 시작되었습니다!');
